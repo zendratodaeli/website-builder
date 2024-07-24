@@ -1,5 +1,5 @@
 import { ModeToggle } from "@/components/global/mode-toggle";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { User } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,12 +25,14 @@ const Navigation = ({ user }: Props) => {
         </ul>
       </nav>
       <aside className=" flex gap-2 items-center">
-        <Link
-          href={"/agency/sign-in"}
-          className=" bg-primary text-white dark:text-black p-2 px-4 rounded-md hover:bg-primary/80"
-        >
-          Login
-        </Link>
+        <div>
+            <Link
+              href={"/agency"}
+              className=" bg-primary text-white dark:text-black p-2 px-4 rounded-md hover:bg-primary/80"
+            >
+              Login
+            </Link>
+        </div>
         <div>
           <SignedIn>
             <UserButton />
