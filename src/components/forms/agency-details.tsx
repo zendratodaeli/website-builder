@@ -167,7 +167,7 @@ const AgencyDetails = ({ data }: Props) => {
       toast({
         variant: 'destructive',
         title: 'Oppse!',
-        description: 'could not create your agency',
+        description: 'Could not create your agency',
       })
     }
   }
@@ -187,7 +187,7 @@ const AgencyDetails = ({ data }: Props) => {
       toast({
         variant: 'destructive',
         title: 'Oppse!',
-        description: 'could not delete your agency ',
+        description: 'Could not delete your agency ',
       })
     }
     setDeletingAgency(false)
@@ -401,7 +401,7 @@ const AgencyDetails = ({ data }: Props) => {
                   <FormLabel>Create A Goal</FormLabel>
                   <FormDescription>
                     ✨ Create a goal for your agency. As your business grows
-                    your goals grow too so dont forget to set the bar higher!
+                    your goals grow too so {"don't"} forget to set the bar higher!
                   </FormDescription>
                   <NumberInput
                     defaultValue={data?.goal}
