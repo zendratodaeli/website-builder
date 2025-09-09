@@ -1,8 +1,8 @@
 import React from "react";
 import Logo from "./logo";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
-import Container from "./core/container";
+import Container from "../core/container";
 
 const Header = () => {
   return (
