@@ -1,9 +1,9 @@
-import { Card } from "../ui/card";
+import { Card } from "../../ui/card";
 import Image from "next/image";
 import projectPlaceholder from "@/public/project-placeholder.png";
 import Form from "next/form";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
 import { Project } from "@/lib/generated/prisma";
 
 type Props = {

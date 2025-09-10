@@ -1,6 +1,6 @@
 import Container from "@/components/core/container";
-import ProjectsHeading from "@/components/pages/projects-heading";
-import ProjectsList from "@/components/pages/projects-list";
+import ProjectsHeading from "@/components/pages/projects/projects-heading";
+import ProjectsList from "@/components/pages/projects/projects-list";
 import { prisma } from "@/lib/prisma";
 import React from "react";
 
