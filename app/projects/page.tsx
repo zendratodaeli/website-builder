@@ -1,13 +1,24 @@
 import Container from "@/components/core/container";
 import ProjectsHeading from "@/components/pages/projects-heading";
 import ProjectsList from "@/components/pages/projects-list";
+import { prisma } from "@/lib/prisma";
 import React from "react";
 
-const ProjectsPage = () => {
+const ProjectsPage = async () => {
+
+  const projects = await prisma.project.findMany({
+    where: {
+      userId: "1"
+    },
+    orderBy: {
+      createdAt: "desc"
+    }
+  })
+
   return (
     <Container className="space-y-16">
       <ProjectsHeading/>
-      <ProjectsList/>
+      <ProjectsList projects={projects}/>
     </Container>
   );
 };
