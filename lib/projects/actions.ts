@@ -34,3 +34,46 @@ export const createProject = async ({
     };
   }
 };
+
+export type UpdateProjectPayload = Pick<Project, "id" | "title">;
+
+export const updateProject = async ({
+  id,
+  title,
+}: UpdateProjectPayload): Promise<ActionsStage<Project>> => {
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id }
+    });
+
+    if(!project) {
+      return {
+        code: StatusCode.NotFound,
+        error: new Error(`NotFound, project with ${id}`)
+      };
+    };
+
+    const updated = await prisma.project.update({
+      where: {
+        id
+      },
+      data: {
+        title
+      }
+    })
+
+    revalidatePath("/projects");
+
+    return {
+      code: StatusCode.Ok,
+      data: updated,
+      message: "Successfully updated project!"
+    }
+
+  } catch (error) {
+    return {
+      code: StatusCode.InternalServerError,
+      error: new Error("Something went wrong wrong while updating")
+    }
+  }
+}
