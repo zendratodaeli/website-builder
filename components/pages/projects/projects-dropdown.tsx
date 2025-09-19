@@ -7,8 +7,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical, Trash2 } from "lucide-react";
 import ProjectDeleteDialog from "./projects-delete-dialog";
+import { Project } from "@/lib/generated/prisma";
 
-const ProjectsDropdown = () => {
+type Props = {
+  id: Project["id"]
+}
+
+
+const ProjectsDropdown = ({id}: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -18,7 +24,7 @@ const ProjectsDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-primary" align="end">
         <DropdownMenuItem asChild>
-          <ProjectDeleteDialog>
+          <ProjectDeleteDialog id={id}>
             <Button className="w-full justify-start text-destructive hover:text-primary-foreground hover:bg-destructive">
               <Trash2 />
               <span>Delete</span>

@@ -12,7 +12,7 @@ type Props = {
 const ProjectsItem = ({ project: { id, title } }: Props) => {
   return (
     <li className="space-y-4 relative">
-      <ProjectsDropdown/>
+      <ProjectsDropdown id={id}/>
       <Card className="py-0">
         <Image src={projectPlaceholder} alt="placeholder image for project" />
       </Card>

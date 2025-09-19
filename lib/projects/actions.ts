@@ -77,3 +77,45 @@ export const updateProject = async ({
     }
   }
 }
+
+
+type DeleteProjectPayload = Pick<Project, "id">
+
+export const deleteProject = async ({
+  id
+}: DeleteProjectPayload): Promise<ActionsStage<Project>> => {
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id }
+    });
+
+    if(!project) {
+      return {
+        code: StatusCode.NotFound,
+        error: new Error(`NotFound, project with ${id}`)
+      };
+    };
+
+    const deleted = await prisma.project.delete({
+      where: {
+        id
+      }
+    })
+
+    revalidatePath("/projects");
+
+    return {
+      code: StatusCode.Ok,
+      data: deleted,
+      message: "Successfully deleted project!"
+    }
+
+  } catch (error) {
+    console.log(error)
+    return {
+      code: StatusCode.InternalServerError,
+      error: new Error("Something went wrong wrong while deleting")
+    }
+  }
+}
+

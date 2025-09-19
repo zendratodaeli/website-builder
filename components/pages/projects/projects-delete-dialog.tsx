@@ -10,12 +10,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ReactNode } from "react";
+import ProjectsDeleteForm from "./projects-delete-form";
+import { Project } from "@/lib/generated/prisma";
 
 type Props = {
   children: ReactNode;
+  id: Project["id"]
 }
 
-const ProjectDeleteDialog = ({children}: Props) => {
+const ProjectDeleteDialog = ({children, id}: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -31,7 +34,7 @@ const ProjectDeleteDialog = ({children}: Props) => {
         </DialogHeader>
 
         <DialogFooter>
-          <Button variant={"destructive"}>Confirm</Button>
+          <ProjectsDeleteForm id={id}/>
           <DialogClose asChild>
             <Button variant={"outline"}>Close</Button>
           </DialogClose>
