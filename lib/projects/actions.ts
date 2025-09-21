@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Project } from "../generated/prisma";
 import { prisma } from "../prisma";
 import { ActionsStage, StatusCode } from "./types";
+import { auth } from "@clerk/nextjs/server";
 
 type CreateProjectPayload = {
 title: Project["title"];
@@ -12,11 +13,20 @@ title: Project["title"];
 export const createProject = async ({
   title,
 }: CreateProjectPayload): Promise<ActionsStage<Project>> => {
+
+  const { userId } = await auth()
+  
+    if(!userId) {
+      return {
+        code: StatusCode.Unauthorized,
+        error: new Error("User must be authenticated")
+      }
+    }
   try {
     const project = await prisma.project.create({
       data: {
         title,
-        userId: "1",
+        userId
       },
     });
 
