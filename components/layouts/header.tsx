@@ -8,7 +8,7 @@ import { SignedIn } from "@clerk/nextjs";
 
 const Header = async () => {
   return (
-    <header className="sticky top-0 bg-background">
+    <header className="sticky top-0 bg-background z-10">
       <Container className="flex justify-between">
         <Logo />
         <div className="space-x-2 flex items-center gap-2">

@@ -25,7 +25,7 @@ const ProjectsDropdown = ({id}: Props) => {
       <DropdownMenuContent className="bg-primary" align="end">
         <DropdownMenuItem asChild>
           <ProjectDeleteDialog id={id}>
-            <Button className="w-full justify-start text-destructive hover:text-primary-foreground hover:bg-destructive">
+            <Button className="w-full justify-start text-destructive hover:text-primary-foreground hover:bg-destructive font-extrabold">
               <Trash2 />
               <span>Delete</span>
             </Button>

@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useDebounce from "@/hook/use-debaounce";
+import useDebounce from "@/hook/use-debounce";
 import { Project } from "@/lib/generated/prisma";
 import { updateProject, UpdateProjectPayload } from "@/lib/projects/actions";
 import Form from "next/form";
@@ -17,7 +17,7 @@ type Props = {
 const ProjectsUpdateForm = ({id, title }: Props) => {
   const [value, setValue] = useState<string>(title);
 
-  const debounced = useDebounce(value);
+  const debounced = useDebounce(value, 700);
 
   const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -48,7 +48,7 @@ const ProjectsUpdateForm = ({id, title }: Props) => {
   return (
     <div>
       <Form action="/projects" className="relative">
-        <Label htmlFor="project-title">Project Title</Label>
+        <Label htmlFor="project-title" className=" text-muted-foreground">Project Title</Label>
         <Input
           id="project-title"
           className="peer"
