@@ -14,7 +14,37 @@ model Project {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   userId String @map("user_id")
+  sections Section[]
 
   @@index([userId, createdAt(sort: Desc)])
   @@map("projects")
+}
+
+enum SectionType {
+  Text
+  Image
+  TextImage
+}
+
+model Section {
+  id Int @id @default(autoincrement())
+  type SectionType
+  index Int
+  projectId Int @map("project_id")
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  text Text?
+
+  @@index([projectId, index(sort: Asc)])
+  @@map("sections")
+}
+
+model Text {
+  id Int @id @default(autoincrement())
+  content String @default("<h1>This is your heading</h1><p>You can write here as much as you want!</p>")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  sectionId Int @unique @map("section_id")
+  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@map("texts")
 }
