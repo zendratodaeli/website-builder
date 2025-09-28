@@ -8,7 +8,21 @@ async function run() {
   const project = await prisma.project.create({
     data: {
       title: "My First Project",
-      userId: "1"
+      userId: "user_331U8WOs3xWJPi81cJOy926vrv2",
+      sections: {
+        create: {
+          type: "Text",
+          index: 0,
+          text: {create: {}}
+        }
+      }
+    },
+    include: {
+      sections: {
+        include: {
+          text: true
+        }
+      }
     }
   });
 
