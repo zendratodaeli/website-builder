@@ -1,28 +1,34 @@
-import React from 'react'
-import SectionButton from './section-button'
-import Container from '@/components/core/container'
-import { Section, Text } from '@/lib/generated/prisma'
+import React from "react";
+import SectionButton from "./section-button";
+import Container from "@/components/core/container";
+import { $Enums, Section, Text } from "@/lib/generated/prisma";
+import TextEditor from "./text-section/text-editor";
 
 type Props = {
-  sections: (Section & {text: Text | null})[]
-}
+  sections: (Section & { text: Text | null })[];
+};
 
-const SectionList = ({sections}: Props) => {
+const SectionList = ({ sections }: Props) => {
   return (
-          <ul>
-        {sections.map((section) => (
-          <li key={section.id}>
-            <SectionButton />
-            <Container asChild>
-              <section className="py-16">{section.text?.content}</section>
-            </Container>
-          </li>
-        ))}
-        <li>
-        <SectionButton />
-        </li>
-      </ul>
-  )
-}
+    <ul>
+      {sections.map((section) => (
+        <li key={section.id}>
+          <SectionButton />
+          <Container asChild>
+            <section className="py-16">
+              {section.type === $Enums.SectionType.Text && section.text && (
+                <TextEditor text={section.text}/>
+              )}
+            </section>
 
-export default SectionList
+          </Container>
+        </li>
+      ))}
+      <li>
+        <SectionButton />
+      </li>
+    </ul>
+  );
+};
+
+export default SectionList;
