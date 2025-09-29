@@ -1,23 +1,24 @@
 import React from "react";
 import SectionButton from "./section-button";
 import Container from "@/components/core/container";
-import { $Enums, Section, Text } from "@/lib/generated/prisma";
+import { $Enums, Project, Section, Text } from "@/lib/generated/prisma";
 import TextEditor from "./text-section/text-editor";
 
 type Props = {
   sections: (Section & { text: Text | null })[];
+  projectId: Project["id"]
 };
 
-const SectionList = ({ sections }: Props) => {
+const SectionList = ({ sections, projectId }: Props) => {
   return (
     <ul>
-      {sections.map((section) => (
-        <li key={section.id}>
-          <SectionButton />
+      {sections.map(({id, index, text, type, projectId}) => (
+        <li key={id}>
+          <SectionButton projectId={projectId} index={index}/>
           <Container asChild>
             <section className="py-16">
-              {section.type === $Enums.SectionType.Text && section.text && (
-                <TextEditor text={section.text}/>
+              {type === $Enums.SectionType.Text && text && (
+                <TextEditor text={text}/>
               )}
             </section>
 
@@ -25,7 +26,7 @@ const SectionList = ({ sections }: Props) => {
         </li>
       ))}
       <li>
-        <SectionButton />
+        <SectionButton index={sections.length} projectId={projectId} />
       </li>
     </ul>
   );

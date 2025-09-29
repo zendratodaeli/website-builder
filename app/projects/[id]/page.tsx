@@ -1,12 +1,8 @@
-import Container from "@/components/core/container";
 import ProjectFooter from "@/components/pages/project/project-footer";
 import ProjectHeader from "@/components/pages/project/project-header";
-import SectionButton from "@/components/pages/project/section-button";
 import SectionList from "@/components/pages/project/section-list";
-import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { Plus } from "lucide-react";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -46,9 +42,9 @@ const ProjectPage = async ({ params }: Props) => {
 
   return (
     <div className="py-16">
-      <ProjectHeader/>
-<SectionList sections={project.sections}/>
-      <ProjectFooter/>
+      <ProjectHeader />
+      <SectionList sections={project.sections} projectId={project.id} />
+      <ProjectFooter />
     </div>
   );
 };

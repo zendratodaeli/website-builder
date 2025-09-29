@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { Project } from "../generated/prisma";
 import { prisma } from "../prisma";
-import { ActionsStage, StatusCode } from "./types";
+import { ActionsState, StatusCode } from "../types";
 import { auth } from "@clerk/nextjs/server";
 
 type CreateProjectPayload = {
@@ -12,7 +12,7 @@ title: Project["title"];
 
 export const createProject = async ({
   title,
-}: CreateProjectPayload): Promise<ActionsStage<Project>> => {
+}: CreateProjectPayload): Promise<ActionsState<Project>> => {
 
   const { userId } = await auth()
   
@@ -50,7 +50,7 @@ export type UpdateProjectPayload = Pick<Project, "id" | "title">;
 export const updateProject = async ({
   id,
   title,
-}: UpdateProjectPayload): Promise<ActionsStage<Project>> => {
+}: UpdateProjectPayload): Promise<ActionsState<Project>> => {
   try {
     const project = await prisma.project.findUnique({
       where: { id }
@@ -93,7 +93,7 @@ type DeleteProjectPayload = Pick<Project, "id">
 
 export const deleteProject = async ({
   id
-}: DeleteProjectPayload): Promise<ActionsStage<Project>> => {
+}: DeleteProjectPayload): Promise<ActionsState<Project>> => {
   try {
     const project = await prisma.project.findUnique({
       where: { id }

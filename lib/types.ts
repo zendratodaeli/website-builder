@@ -8,7 +8,7 @@ export enum StatusCode {
   InternalServerError = 500,
 }
 
-export type ActionsStage<T> = {
+export type ActionsState<T> = {
   code: StatusCode;
   message?: string;
   data?: T;
