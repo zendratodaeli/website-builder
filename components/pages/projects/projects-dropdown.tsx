@@ -6,8 +6,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical, Trash2 } from "lucide-react";
-import ProjectDeleteDialog from "./projects-delete-dialog";
+import DeleteDialog from "../../core/delete-dialog";
 import { Project } from "@/lib/generated/prisma";
+import { deleteProject } from "@/lib/projects/actions";
 
 type Props = {
   id: Project["id"]
@@ -24,12 +25,12 @@ const ProjectsDropdown = ({id}: Props) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-primary" align="end">
         <DropdownMenuItem asChild>
-          <ProjectDeleteDialog id={id}>
+          <DeleteDialog action={deleteProject.bind(null, { id})}>
             <Button className="w-full justify-start text-destructive hover:text-primary-foreground hover:bg-destructive font-extrabold">
               <Trash2 />
               <span>Delete</span>
             </Button>
-          </ProjectDeleteDialog>
+          </DeleteDialog>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

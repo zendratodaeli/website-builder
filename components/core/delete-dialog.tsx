@@ -10,31 +10,29 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ReactNode } from "react";
-import ProjectsDeleteForm from "./projects-delete-form";
 import { Project } from "@/lib/generated/prisma";
+import DeleteForm from "./delete-form";
+import { ActionsState } from "@/lib/types";
 
-type Props = {
+type Props<T> = {
   children: ReactNode;
-  id: Project["id"]
-}
+  action: () => Promise<ActionsState<T>>;
+};
 
-const ProjectDeleteDialog = ({children, id}: Props) => {
+export default function DeleteDialog<T>({ action, children }: Props<T>) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you absolutey sure?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanantly delete your
-            project!
+            This action cannot be undone. This will permanantly delete it from database!
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
-          <ProjectsDeleteForm id={id}/>
+          <DeleteForm action={action} />
           <DialogClose asChild>
             <Button variant={"outline"}>Close</Button>
           </DialogClose>
@@ -42,6 +40,4 @@ const ProjectDeleteDialog = ({children, id}: Props) => {
       </DialogContent>
     </Dialog>
   );
-};
-
-export default ProjectDeleteDialog;
+}

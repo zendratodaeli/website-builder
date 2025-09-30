@@ -81,6 +81,7 @@ export const updateProject = async ({
     }
 
   } catch (error) {
+    console.error(error)
     return {
       code: StatusCode.InternalServerError,
       error: new Error("Something went wrong wrong while updating")
@@ -124,7 +125,7 @@ export const deleteProject = async ({
     console.log(error)
     return {
       code: StatusCode.InternalServerError,
-      error: new Error("Something went wrong wrong while deleting")
+      error: new Error("Something went wrong wrong while deleting project")
     }
   }
 }

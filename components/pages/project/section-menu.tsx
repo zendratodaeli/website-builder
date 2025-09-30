@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
+import DeleteDialog from "@/components/core/delete-dialog";
+import { deleteSection } from "@/lib/project/action";
+import { Section } from "@/lib/generated/prisma";
 
-const SectionMenu = () => {
+type Props = {
+  id: Section["id"]
+}
+
+const SectionMenu = ({id}: Props) => {
   return (
     <div
       className={cn(
@@ -12,9 +19,12 @@ const SectionMenu = () => {
         "duration-300"
       )}
     >
+      <DeleteDialog action={deleteSection.bind(null, { id })}>
+
       <Button variant={"destructive"}>
         <Trash />
       </Button>
+      </DeleteDialog>
     </div>
   );
 };

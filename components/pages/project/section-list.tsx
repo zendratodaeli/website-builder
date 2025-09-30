@@ -16,7 +16,7 @@ const SectionList = ({ sections, projectId }: Props) => {
       {sections.map(({ id, index, text, type, projectId }) => (
         <li key={id}>
           <SectionButton projectId={projectId} index={index} />
-          <SectionContainer>
+          <SectionContainer id={id}>
             {type === $Enums.SectionType.Text && text && (
               <TextEditor text={text} />
             )}
