@@ -12,7 +12,7 @@ const SectionContainer = ({ id, children }: Props) => {
   return (
     <section className="py-16 relative overflow-hidden group">
       <SectionMenu id={id}/>
-      <Container asChild>{children}</Container>
+      <Container className="py-0">{children}</Container>
     </section>
   );
 };

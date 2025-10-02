@@ -54,7 +54,7 @@ export const createSection = async ({
 
 type DeleteSectionPayload = Pick<Section, "id">
 
-export const deleteSection = async ({
+export const  deleteSection = async ({
   id
 }: DeleteSectionPayload): Promise<ActionsState<Section>> => {
   try {

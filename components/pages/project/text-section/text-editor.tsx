@@ -1,27 +1,57 @@
-'use client'
+"use client";
 
-import { Text } from '@/lib/generated/prisma'
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
+import UseTextEditor from "@/hooks/use-text-editor";
+import { Text } from "@/lib/generated/prisma";
+import { cn } from "@/lib/utils";
+import { EditorContent } from "@tiptap/react";
+import { useState } from "react";
+import TextEditorTools from "./text-editor-tools";
 
 type Props = {
   text: Text;
-}
+};
 
-const TextEditor = ({text: {content}}: Props) => {
-  const editor = useEditor({
-    extensions: [StarterKit],
+const TextEditor = ({ text: { content } }: Props) => {
+  const [isEditButtonShown, setIsEditButtonShown] = useState<boolean>(false);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  const editor = UseTextEditor({
     content,
-    // Don't render immediately on the server to avoid SSR issues
-    immediatelyRender: false,
-    editorProps: {
-    attributes: {
-      class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none',
-    },
-  },
-  })
+    editable: isEditable,
+  });
 
-  return <EditorContent editor={editor} />
-}
+  const handleClick = () => {
+    if (!isEditButtonShown) {
+      setIsEditButtonShown(true);
+    }
 
-export default TextEditor
+    if (isEditButtonShown && !isEditable) {
+      setIsEditable(true);
+    }
+  };
+
+  if (!editor) return null;
+
+  return (
+    <div className="relative">
+      <TextEditorTools
+        editor={editor}
+        onEditButtonClick={handleClick}
+        isEditButtonShown={isEditButtonShown}
+        isEditable={isEditable}
+      />
+
+      <EditorContent
+        className={cn(
+          "border p-1",
+          isEditButtonShown && "outline outline-offset-4 outline-primary",
+          isEditable && "outline-ring/50 outline-dashed border-primary"
+        )}
+        editor={editor}
+        onClick={handleClick}
+      />
+    </div>
+  );
+};
+
+export default TextEditor;
