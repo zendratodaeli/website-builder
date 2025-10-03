@@ -4,15 +4,17 @@ import UseTextEditor from "@/hooks/use-text-editor";
 import { Text } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
 import { EditorContent } from "@tiptap/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import TextEditorTools from "./text-editor-tools";
 import useOutsideClick from "@/hooks/use-outside-click";
+import { updateText } from "@/lib/text/action";
+import { toast } from "sonner";
 
 type Props = {
   text: Text;
 };
 
-const TextEditor = ({ text: { content } }: Props) => {
+const TextEditor = ({ text: { id, content } }: Props) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
 
@@ -21,12 +23,21 @@ const TextEditor = ({ text: { content } }: Props) => {
 
   useOutsideClick([editorRef, toolbarRef], () => {
     setIsEditable(false);
-        setIsEditButtonShown(false);
-  })
+    setIsEditButtonShown(false);
+  });
 
   const editor = UseTextEditor({
     content,
     editable: isEditable,
+    onUpdate: async ({editor}) => {
+      const updatedContent = editor.getHTML();
+
+      const {data, error, message} = await updateText({id, data: { content: updatedContent}})
+      
+      if(data) return toast.success(message);
+      if(error) return toast.error(error.message);
+    
+    }
   });
 
   const handleClick = () => {

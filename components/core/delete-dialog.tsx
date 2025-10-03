@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ReactNode } from "react";
-import { Project } from "@/lib/generated/prisma";
 import DeleteForm from "./delete-form";
 import { ActionsState } from "@/lib/types";
 

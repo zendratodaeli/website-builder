@@ -1,8 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Project } from "@/lib/generated/prisma";
-import { deleteProject } from "@/lib/projects/actions";
 import { ActionsState } from "@/lib/types";
 import { toast } from "sonner";
 
