@@ -14,25 +14,46 @@ export const updateText = async ({
   id,
   data,
 }: UpdateTextPayload): Promise<ActionsState<Text>> => {
-  const updated = await prisma.text.update({
-    where: {
-      id,
-    },
-    data,
-    include: {
-      section: {
-        select: {
-          projectId: true,
+  try {
+    const text = await prisma.text.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!text) {
+      return {
+        code: StatusCode.NotFound,
+        error: new Error(`Not found text with id ${id}`),
+      };
+    }
+
+    const updated = await prisma.text.update({
+      where: {
+        id,
+      },
+      data,
+      include: {
+        section: {
+          select: {
+            projectId: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  revalidatePath(`/projects/${updated.section.projectId}`);
+    revalidatePath(`/projects/${updated.section.projectId}`);
 
-  return {
-    code: StatusCode.Ok,
-    data: updated,
-    message: "Successfully updated text content!",
-  };
+    return {
+      code: StatusCode.Ok,
+      data: updated,
+      message: "Successfully updated text content!",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      code: StatusCode.InternalServerError,
+      error: new Error(`Something went wrong  while updatin text content!`),
+    };
+  }
 };
