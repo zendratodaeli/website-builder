@@ -4,16 +4,25 @@ import UseTextEditor from "@/hooks/use-text-editor";
 import { Text } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
 import { EditorContent } from "@tiptap/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextEditorTools from "./text-editor-tools";
+import useOutsideClick from "@/hooks/use-outside-click";
 
 type Props = {
   text: Text;
 };
 
 const TextEditor = ({ text: { content } }: Props) => {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+
   const [isEditButtonShown, setIsEditButtonShown] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useOutsideClick([editorRef, toolbarRef], () => {
+    setIsEditable(false);
+        setIsEditButtonShown(false);
+  })
 
   const editor = UseTextEditor({
     content,
@@ -36,6 +45,7 @@ const TextEditor = ({ text: { content } }: Props) => {
     <div className="relative">
       {isEditButtonShown && (
         <TextEditorTools
+          ref={toolbarRef}
           editor={editor}
           onEditButtonClick={handleClick}
           isEditable={isEditable}
@@ -43,6 +53,7 @@ const TextEditor = ({ text: { content } }: Props) => {
       )}
 
       <EditorContent
+        ref={editorRef}
         className={cn(
           "border p-1",
           isEditButtonShown && "outline outline-offset-4 outline-primary",
