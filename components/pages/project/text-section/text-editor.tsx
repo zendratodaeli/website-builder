@@ -2,9 +2,9 @@
 
 import UseTextEditor from "@/hooks/use-text-editor";
 import { Text } from "@/lib/generated/prisma";
-import { cn } from "@/lib/utils";
+import { cn, debounce } from "@/lib/utils";
 import { EditorContent } from "@tiptap/react";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import TextEditorTools from "./text-editor-tools";
 import useOutsideClick from "@/hooks/use-outside-click";
 import { updateText } from "@/lib/text/action";
@@ -26,16 +26,22 @@ const TextEditor = ({ text: { id, content } }: Props) => {
     setIsEditButtonShown(false);
   });
 
+  const debounceAndUpdate = useCallback(
+    debounce(async(id: Text["id"], content: Text["content"]) => {
+   const {data, error, message} = await updateText({id, data: { content}})
+      
+      if(data) return toast.success(message);
+      if(error) return toast.error(error.message);
+
+  }), [])
+
   const editor = UseTextEditor({
     content,
     editable: isEditable,
     onUpdate: async ({editor}) => {
       const updatedContent = editor.getHTML();
 
-      const {data, error, message} = await updateText({id, data: { content: updatedContent}})
-      
-      if(data) return toast.success(message);
-      if(error) return toast.error(error.message);
+      debounceAndUpdate(id, updatedContent)
     
     }
   });
