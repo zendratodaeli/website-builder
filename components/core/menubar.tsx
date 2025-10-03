@@ -28,8 +28,13 @@ type MenuBarItemProps = ComponentProps<typeof Button> & {
   asChild?: boolean;
 }
 
-export const MenuBarItem = ({asChild, ...rest}: MenuBarItemProps) => {
+export const MenuBarItem = ({asChild, size = "icon", className, variant, ...rest}: MenuBarItemProps) => {
   const Comp = asChild ? Slot : Button;
 
-  return <Comp {...rest}/>
+  const isDestructive = variant === "destructive";
+
+  return <Comp size={size} {...rest} className={cn(
+    !isDestructive && "hover:bg-accent/20", className)}
+    variant={variant} 
+    />
 }

@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button";
 import { Editor } from "@tiptap/react";
-import TextEditorMenubar from "./text-editor-menubar";
 import { Pencil } from "lucide-react";
+import MenuBar, { MenuBarItem } from "@/components/core/menubar";
+import TextAlignButtons from "./text-align-buttons";
 
 type Props = {
   editor: Editor;
-  isEditButtonShown: boolean;
   isEditable: boolean;
   onEditButtonClick: () => void;
 };
@@ -13,22 +12,21 @@ type Props = {
 const TextEditorTools = ({
   editor,
   isEditable,
-  isEditButtonShown,
   onEditButtonClick,
 }: Props) => {
   return (
-    <div className="absolute -top-12 left-0">
-      {isEditButtonShown && !isEditable && (
-        <Button onClick={onEditButtonClick}>
+    <MenuBar className="absolute -top-13 left-0">
+      {!isEditable && (
+        <MenuBarItem onClick={onEditButtonClick}>
           <Pencil />
-        </Button>
+        </MenuBarItem>
       )}
 
-      {isEditable && isEditButtonShown && (
-      <TextEditorMenubar editor={editor}/>
+      {isEditable && (
+      <TextAlignButtons editor={editor}/>
         
       )}
-    </div>
+    </MenuBar>
   );
 };
 

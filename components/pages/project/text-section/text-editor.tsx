@@ -34,12 +34,13 @@ const TextEditor = ({ text: { content } }: Props) => {
 
   return (
     <div className="relative">
-      <TextEditorTools
-        editor={editor}
-        onEditButtonClick={handleClick}
-        isEditButtonShown={isEditButtonShown}
-        isEditable={isEditable}
-      />
+      {isEditButtonShown && (
+        <TextEditorTools
+          editor={editor}
+          onEditButtonClick={handleClick}
+          isEditable={isEditable}
+        />
+      )}
 
       <EditorContent
         className={cn(

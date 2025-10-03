@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DeleteDialog from "@/components/core/delete-dialog";
