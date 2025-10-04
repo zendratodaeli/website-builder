@@ -42,9 +42,9 @@ const ProjectPage = async ({ params }: Props) => {
 
   return (
     <div className="py-16">
-      <ProjectHeader />
+      {/* <ProjectHeader /> */}
       <SectionList sections={project.sections} projectId={project.id} />
-      <ProjectFooter />
+      {/* <ProjectFooter /> */}
     </div>
   );
 };

@@ -45,6 +45,20 @@ model Text {
   updatedAt DateTime @updatedAt @map("updated_at")
   sectionId Int @unique @map("section_id")
   section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  externalLink ExternalLink?
 
+  @@index([sectionId])
   @@map("texts")
+}
+
+model ExternalLink {
+  id Int @id @default(autoincrement())
+  label String @default("Details")
+  url String @default("")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  textId Int @unique @map("text_id")
+  text Text @relation(fields: [textId], references: [id], onDelete: Cascade)
+
+  @@map("external_links")
 }

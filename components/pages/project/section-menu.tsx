@@ -1,4 +1,4 @@
-import { Trash } from "lucide-react";
+import { Link, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DeleteDialog from "@/components/core/delete-dialog";
 import { deleteSection } from "@/lib/project/action";
@@ -24,6 +24,8 @@ const SectionMenu = ({ id }: Props) => {
             <Trash />
         </MenuBarItem>
       </DeleteDialog>
+
+      
     </MenuBar>
   );
 };
