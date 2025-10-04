@@ -9,7 +9,7 @@ export enum StatusCode {
 }
 
 export type ActionsState<T> = {
-  code: StatusCode;
+  code?: StatusCode;
   message?: string;
   data?: T;
   error?: Error;
