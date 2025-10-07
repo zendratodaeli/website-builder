@@ -33,9 +33,23 @@ model Section {
   projectId Int @map("project_id")
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   text Text?
+  image Image?
 
   @@index([projectId, index(sort: Asc)])
   @@map("sections")
+}
+
+model Image {
+  id Int @id @default(autoincrement())
+  url String @default("https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+  alt String @default("Nias Food")
+  caption String @default("")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  sectionId Int @unique @map("section_id")
+  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@map("images")
 }
 
 enum RowPosition {
@@ -62,10 +76,10 @@ model ExternalLink {
   id Int @id @default(autoincrement())
   label String @default("Details")
   url String @default("")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
   textId Int @unique @map("text_id")
   text Text @relation(fields: [textId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("external_links")
 }
