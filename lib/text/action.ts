@@ -7,7 +7,7 @@ import { ActionsState, StatusCode } from "../types";
 
 type UpdateTextPayload = {
   id: Text["id"];
-  data: Pick<Prisma.TextUpdateInput, "content">;
+  data: Pick<Prisma.TextUpdateInput, "content" | "rowPosition">;
 };
 
 export const updateText = async ({

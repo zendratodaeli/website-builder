@@ -1,6 +1,4 @@
-import ProjectFooter from "@/components/pages/project/project-footer";
-import ProjectHeader from "@/components/pages/project/project-header";
-import SectionList from "@/components/pages/project/section-list";
+import SectionList from "@/components/pages/project/sections/section-list";
 import { getProjectWithAll } from "@/lib/project";
 import { notFound } from "next/navigation";
 import React from "react";

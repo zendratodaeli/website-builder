@@ -6,3 +6,10 @@ export type ProjectWithAll = NonNullable<
 >;
 
 export type TextWithExternalLink = Text & { externalLink: ExternalLink | null}
+
+export type SectionWithAll = ProjectWithAll["sections"][number];
+
+export enum DirectionEnum {
+  Left = "left",
+  Right = "right"
+}

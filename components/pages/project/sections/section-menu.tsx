@@ -4,7 +4,7 @@ import DeleteDialog from "@/components/core/delete-dialog";
 import { deleteSection } from "@/lib/project/action";
 import { Section } from "@/lib/generated/prisma";
 import MenuBar, { MenuBarItem } from "@/components/core/menubar";
-import AddLinkButton from "./add-link-button";
+import AddLinkButton from "../external-link/add-link-button";
 import { TextWithExternalLink } from "@/lib/project/types";
 
 type Props = {

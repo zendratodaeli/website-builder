@@ -6,7 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const debounce = <T extends (...args: Parameters<T>) => void>
-  (callback: T
+  (
+    callback: T,
+    delay: number = 200
   ) => {
     let id: NodeJS.Timeout;
 
@@ -14,7 +16,6 @@ export const debounce = <T extends (...args: Parameters<T>) => void>
       clearTimeout(id)
       id = setTimeout(() => {
         callback(...args);
-      }, 1000)
-
+      }, delay)
     }
   };

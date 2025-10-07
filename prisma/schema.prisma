@@ -38,9 +38,16 @@ model Section {
   @@map("sections")
 }
 
+enum RowPosition {
+  Left
+  Center
+  Right
+}
+
 model Text {
   id Int @id @default(autoincrement())
   content String @default("<h1>This is your heading</h1><p>You can write here as much as you want!</p>")
+  rowPosition RowPosition @default(Left)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   sectionId Int @unique @map("section_id")
