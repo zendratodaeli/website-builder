@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { $Enums, Section } from "@/lib/generated/prisma";
 import { createSection } from "@/lib/project/action";
-import { LetterText } from "lucide-react";
+import { ImagePlus, ListPlus } from "lucide-react";
 import { toast } from "sonner";
 
 type Props = {
@@ -33,10 +33,26 @@ const SectionOptions = ({index, projectId}: Props) => {
           onClick={() => {handleClick($Enums.SectionType.Text)}}
         >
           <div className="group-hover:bg-accent p-4">
-            <LetterText className="size-10 group-hover:bg-accent" />
+            <ListPlus className="size-10 group-hover:bg-accent" />
           </div>
           <span className="text-muted-foreground hover:text-foreground text-xs">
             Text
+          </span>
+        </Button>
+      </li>
+
+      <li className="flex justify-center items-center">
+        <Button
+          variant={"plain"}
+          size={"none"}
+          className="group flex flex-col items-center gap-2"
+          onClick={() => {handleClick($Enums.SectionType.Image)}}
+        >
+          <div className="group-hover:bg-accent p-4">
+            <ImagePlus className="size-10 group-hover:bg-accent" />
+          </div>
+          <span className="text-muted-foreground hover:text-foreground text-xs">
+            Image
           </span>
         </Button>
       </li>

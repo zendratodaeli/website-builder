@@ -24,6 +24,7 @@ export const getProjectWithAll = async (id: Project["id"]) => {
               externalLink: true,
             },
           },
+          image: true,
         },
       },
     },

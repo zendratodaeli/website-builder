@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Section } from "../generated/prisma";
+import { $Enums, Section } from "../generated/prisma";
 import { prisma } from "../prisma";
 import { ActionsState, StatusCode } from "../types";
 
@@ -27,9 +27,8 @@ export const createSection = async ({
           index,
           type,
           projectId,
-          text: {
-            create: {},
-          },
+          ...(type === $Enums.SectionType.Text && { text: { create: {} } }),
+          ...(type === $Enums.SectionType.Image && { image: { create: {} } }),
         },
       });
     });
@@ -51,23 +50,22 @@ export const createSection = async ({
   }
 };
 
+type DeleteSectionPayload = Pick<Section, "id">;
 
-type DeleteSectionPayload = Pick<Section, "id">
-
-export const  deleteSection = async ({
-  id
+export const deleteSection = async ({
+  id,
 }: DeleteSectionPayload): Promise<ActionsState<Section>> => {
   try {
     const section = await prisma.section.findUnique({
-      where: { id }
+      where: { id },
     });
 
-    if(!section) {
+    if (!section) {
       return {
         code: StatusCode.NotFound,
-        error: new Error(`NotFound, section with ${id}`)
+        error: new Error(`NotFound, section with ${id}`),
       };
-    };
+    }
 
     const deleted = await prisma.$transaction(async () => {
       await prisma.section.updateManyAndReturn({
@@ -79,10 +77,10 @@ export const  deleteSection = async ({
       });
 
       return await prisma.section.delete({
-      where: {
-        id
-      }
-    })
+        where: {
+          id,
+        },
+      });
     });
 
     revalidatePath(`/projects/${section.projectId}`);
@@ -90,14 +88,13 @@ export const  deleteSection = async ({
     return {
       code: StatusCode.Ok,
       data: deleted,
-      message: "Successfully deleted section!"
-    }
-
+      message: "Successfully deleted section!",
+    };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return {
       code: StatusCode.InternalServerError,
-      error: new Error("Something went wrong wrong while deleting section")
-    }
+      error: new Error("Something went wrong wrong while deleting section"),
+    };
   }
-}
+};

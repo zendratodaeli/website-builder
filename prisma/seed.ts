@@ -10,33 +10,31 @@ async function run() {
       title: "My First Project",
       userId: "user_331U8WOs3xWJPi81cJOy926vrv2",
       sections: {
-        create: {
+        create: [{
           type: "Text",
           index: 0,
-          text: {create: {}}
-        }
-      }
+          text: { create: {} },
+        },
+         {
+          type: "Image",
+          index: 1,
+          image: { create: {} },
+        },
+      ],
+        
+      },
     },
-    include: {
-      sections: {
-        include: {
-          text: true
-        }
-      }
-    }
   });
 
-  console.log(JSON.stringify(project))
-
-  console.log(`Successfully inserted projects data`)
-};
+  console.log(`Successfully inserted projects data`);
+}
 
 run()
-  .then(async() => {
+  .then(async () => {
     await prisma.$disconnect();
   })
-  .catch(async(error) => {
+  .catch(async (error) => {
     console.error(error);
     await prisma.$disconnect();
     process.exit(1);
-  })
+  });
