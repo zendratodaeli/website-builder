@@ -9,14 +9,18 @@ const bungee = Bungee({
   weight: "400",
 });
 
-const Logo = () => {
+type Props = {
+  isTextShown?: boolean;
+}
+
+const Logo = ({isTextShown = true }: Props) => {
   return (
     <Link
       href={"/"}
       className={cn("flex gap-2 items-center", `${bungee.className} text-3xl`)}
     >
       <Image className="size-8" src={globe} alt="logo" />
-      <span>W-Builder</span>
+      {isTextShown && <span>W-Builder</span>}
     </Link>
   );
 };

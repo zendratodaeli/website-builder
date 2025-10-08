@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Logo from "./logo";
 import { Button } from "../ui/button";
@@ -5,18 +7,33 @@ import Link from "next/link";
 import Container from "../core/container";
 import AuthButtons from "./auth-buttons";
 import { SignedIn } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import BackButton from "../core/back-button";
 
-const Header = async () => {
+const Header = () => {
+  const pathName = usePathname();
+  const isProjectPage = pathName.includes("/projects/");
+  const isLandingPage = pathName === "/";
+
   return (
-    <header className="sticky top-0 bg-background z-10">
+    <header
+      className={cn(
+        "sticky top-0 bg-background z-10",
+        isProjectPage && "dark"
+      )}
+    >
       <Container className="flex justify-between">
-        <Logo />
+        <div className="flex items-center gap-4">
+          <Logo isTextShown={!isProjectPage} />
+          { isProjectPage && <BackButton/>}
+        </div>
         <div className="space-x-2 flex items-center gap-2">
-          <SignedIn>
+          { isLandingPage && <SignedIn>
             <Button asChild>
               <Link href={"/projects"}>Launch</Link>
             </Button>
-          </SignedIn>
+          </SignedIn>}
 
           <AuthButtons />
         </div>
