@@ -1,15 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { $Enums } from "@/lib/generated/prisma";
 import { POSITION_BUTTONS } from "@/lib/project/constants";
 import { DirectionEnum } from "@/lib/project/types";
 import { cn } from "@/lib/utils";
 import React from "react";
 
 type Props = {
+  rowPosition: $Enums.RowPosition;
   onPositionChange: (direction: DirectionEnum) => void;
 }
 
-const TextSectionPosition = ({onPositionChange}: Props) => {
-  return POSITION_BUTTONS.map(({ className, direction, icon }) => (
+const TextSectionPosition = ({onPositionChange, rowPosition}: Props) => {
+  return POSITION_BUTTONS.filter(button => button.direction !== rowPosition.toLowerCase()).map(({ className, direction, icon }) => (
     <Button
       key={direction}
       size={"icon"}

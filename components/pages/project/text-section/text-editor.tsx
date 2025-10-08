@@ -73,6 +73,7 @@ const TextEditor = ({
           />
         )}
         <TextSectionPosition
+          rowPosition={rowPosition}
           onPositionChange={(direction) => {
             handlePositionChange(rowPosition, direction);
           }}
