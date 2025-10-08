@@ -1,18 +1,17 @@
-import { Trash } from "lucide-react";
+import { ArrowLeftRight, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DeleteDialog from "@/components/core/delete-dialog";
 import { deleteSection } from "@/lib/project/action";
-import { Section } from "@/lib/generated/prisma";
 import MenuBar, { MenuBarItem } from "@/components/core/menubar";
 import AddLinkButton from "../external-link/add-link-button";
-import { TextWithExternalLink } from "@/lib/project/types";
+import { SectionWithAll } from "@/lib/project/types";
+import TextImageSwapButton from "../text-image-section/text-image-swap-button";
 
 type Props = {
-  id: Section["id"];
-  text: TextWithExternalLink | null;
+  section: SectionWithAll;
 };
 
-const SectionMenu = ({ id, text }: Props) => {
+const SectionMenu = ({ section: { id, text, isReversed, image } }: Props) => {
   return (
     <MenuBar
       className={cn(
@@ -28,7 +27,11 @@ const SectionMenu = ({ id, text }: Props) => {
         </MenuBarItem>
       </DeleteDialog>
 
-      {text && <AddLinkButton textId={text.id} linkId={text.externalLink?.id} />}
+      {text && (
+        <AddLinkButton textId={text.id} linkId={text.externalLink?.id} />
+      )}
+
+      {text && image && <TextImageSwapButton isReversed={isReversed} id={id} />}
     </MenuBar>
   );
 };

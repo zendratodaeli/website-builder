@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { $Enums, Section } from "../generated/prisma";
+import { $Enums, Prisma, Section } from "../generated/prisma";
 import { prisma } from "../prisma";
 import { ActionsState, StatusCode } from "../types";
 
@@ -22,13 +22,16 @@ export const createSection = async ({
         data: { index: { increment: 1 } },
       });
 
+      const isTextRequired = type === $Enums.SectionType.Text || type === $Enums.SectionType.TextImage;
+      const isImageRequired = type === $Enums.SectionType.Image || type === $Enums.SectionType.TextImage;
+
       return prisma.section.create({
         data: {
           index,
           type,
           projectId,
-          ...(type === $Enums.SectionType.Text && { text: { create: {} } }),
-          ...(type === $Enums.SectionType.Image && { image: { create: {} } }),
+          ...(isTextRequired && { text: { create: {} } }),
+          ...(isImageRequired && { image: { create: {} } }),
         },
       });
     });
@@ -98,3 +101,19 @@ export const deleteSection = async ({
     };
   }
 };
+
+type UpdateSectionPayload = {
+  id: Section["id"]
+  data: Prisma.SectionUpdateInput
+}
+
+export const updateSection = async ({id, data}: UpdateSectionPayload) => {
+  const updated = await prisma.section.update({
+    where: {
+      id
+    },
+    data
+  });
+
+  revalidatePath(`/projects/${updated.projectId}`)
+}

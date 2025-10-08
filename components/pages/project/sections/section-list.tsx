@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import SectionButton from "./section-button";
 import { Project } from "@/lib/generated/prisma";
 
@@ -14,11 +14,12 @@ const SectionList = ({ sections, projectId }: Props) => {
   return (
     <>
       {sections.map((section) => (
-        <SectionListItem key={section.id} section={section} />
+        <Fragment key={section.id}>
+          <SectionButton projectId={projectId} index={section.index} />
+          <SectionListItem key={section.id} section={section} />
+        </Fragment>
       ))}
-      <li>
-        <SectionButton index={sections.length} projectId={projectId} />
-      </li>
+      <SectionButton index={sections.length} projectId={projectId} />
     </>
   );
 };

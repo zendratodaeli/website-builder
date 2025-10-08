@@ -70,7 +70,7 @@ const ImageSection = ({ image }: Props) => {
         )}
         onClick={handleEditMode}
       >
-        <figure>
+        <figure className="pointer-events-none">
           <Image src={url} width={1200} height={1200} alt={alt} />
           <figcaption>{caption}</figcaption>
         </figure>

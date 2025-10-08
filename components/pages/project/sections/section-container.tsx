@@ -1,13 +1,11 @@
 import React, { ReactNode } from "react";
 import Container from "@/components/core/container";
 import SectionMenu from "./section-menu";
-import { Section } from "@/lib/generated/prisma";
-import { TextWithExternalLink } from "@/lib/project/types";
+import { SectionWithAll } from "@/lib/project/types";
 
 type Props = {
   children: ReactNode;
-  id: Section["id"];
-  text: TextWithExternalLink | null;
+  section: SectionWithAll
 };
 
 const SectionContainer = ({children, ...rest }: Props) => {
