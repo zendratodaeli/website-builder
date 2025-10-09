@@ -1,16 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { $Enums, Prisma, Section } from "../generated/prisma";
+import { $Enums, Prisma, Section, Video } from "../generated/prisma";
 import { prisma } from "../prisma";
 import { ActionsState, StatusCode } from "../types";
 
-type CreateSectionPayload = Pick<Section, "index" | "type" | "projectId">;
+type CreateSectionPayload = Pick<Section, "index" | "type" | "projectId"> & {
+  url?: Video["url"]
+};
 
 export const createSection = async ({
   index,
   type,
   projectId,
+  url
 }: CreateSectionPayload): Promise<ActionsState<Section>> => {
   try {
     const created = await prisma.$transaction(async () => {
@@ -22,8 +25,14 @@ export const createSection = async ({
         data: { index: { increment: 1 } },
       });
 
-      const isTextRequired = type === $Enums.SectionType.Text || type === $Enums.SectionType.TextImage;
-      const isImageRequired = type === $Enums.SectionType.Image || type === $Enums.SectionType.TextImage;
+      const isTextRequired =
+        type === $Enums.SectionType.Text ||
+        type === $Enums.SectionType.TextImage;
+      const isImageRequired =
+        type === $Enums.SectionType.Image ||
+        type === $Enums.SectionType.TextImage;
+      const isVideoRequired =
+        type === $Enums.SectionType.Video && url;
 
       return prisma.section.create({
         data: {
@@ -32,6 +41,7 @@ export const createSection = async ({
           projectId,
           ...(isTextRequired && { text: { create: {} } }),
           ...(isImageRequired && { image: { create: {} } }),
+          ...(isVideoRequired && { video: { create: { url } } }),
         },
       });
     });
@@ -103,17 +113,17 @@ export const deleteSection = async ({
 };
 
 type UpdateSectionPayload = {
-  id: Section["id"]
-  data: Prisma.SectionUpdateInput
-}
+  id: Section["id"];
+  data: Prisma.SectionUpdateInput;
+};
 
-export const updateSection = async ({id, data}: UpdateSectionPayload) => {
+export const updateSection = async ({ id, data }: UpdateSectionPayload) => {
   const updated = await prisma.section.update({
     where: {
-      id
+      id,
     },
-    data
+    data,
   });
 
-  revalidatePath(`/projects/${updated.projectId}`)
-}
+  revalidatePath(`/projects/${updated.projectId}`);
+};

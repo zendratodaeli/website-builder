@@ -13,6 +13,16 @@ import BackButton from "../core/back-button";
 
 const Header = () => {
   const pathName = usePathname();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Prevents hydration mismatch: render nothing until client hydration is complete
+    return null;
+  }
   const isProjectPage = pathName.includes("/projects/");
   const isLandingPage = pathName === "/";
 
@@ -22,6 +32,7 @@ const Header = () => {
         "sticky top-0 bg-background z-10",
         isProjectPage && "dark"
       )}
+      suppressHydrationWarning
     >
       <Container className="flex justify-between">
         <div className="flex items-center gap-4">

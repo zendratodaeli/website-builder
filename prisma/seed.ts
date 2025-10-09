@@ -26,6 +26,17 @@ async function run() {
     },
   });
 
+
+  await prisma.section.create({
+    data: {
+      index: 2,
+      type: "Video",
+      video: {
+        create: { url: "https://www.youtube.com/embed/5XHExpV6ons?list=PLGftZK6W8sO43qLc4hiWRM-JQehhNbxUW"}
+      },
+      projectId: project.id
+    }
+  });
   console.log(`Successfully inserted projects data`);
 }
 

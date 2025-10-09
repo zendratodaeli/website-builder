@@ -35,7 +35,6 @@ const ImageSection = ({ image }: Props) => {
     setIsEditMode(true);
   };
 
-
   return (
     <div className="relative">
       {/* toolbar */}

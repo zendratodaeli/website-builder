@@ -1,5 +1,6 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ImagePlus, LayoutList, ListPlus, Video } from "lucide-react";
 import { DirectionEnum } from "./types";
+import { $Enums } from "../generated/prisma";
 
 export const POSITION_BUTTONS = [
   {
@@ -12,4 +13,27 @@ export const POSITION_BUTTONS = [
     direction: DirectionEnum.Right,
     className: "right-0 group-hover:translate-x-12",
   },
-];
+] as const;
+
+export const SECTION_OPTIONS = [
+  {
+    label: "Text",
+    icon: <ListPlus className="size-10 group-hover:bg-accent" />,
+    type: $Enums.SectionType.Text,
+  },
+  {
+    label: "Image",
+    icon: <ImagePlus className="size-10 group-hover:bg-accent" />,
+    type: $Enums.SectionType.Image,
+  },
+  {
+    label: "Text & Image",
+    icon: <LayoutList className="size-10 group-hover:bg-accent" />,
+    type: $Enums.SectionType.TextImage,
+  },
+  {
+    label: "Video",
+    icon: <Video className="size-10 group-hover:bg-accent" />,
+    type: $Enums.SectionType.Video,
+  },
+] as const;
