@@ -1,4 +1,4 @@
-import SectionList from "@/components/pages/project/sections/section-list";
+import SectionList from "@/components/features/project/sections/section-list";
 import { getProjectWithAll } from "@/lib/project";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -19,9 +19,7 @@ const ProjectPage = async ({ params }: Props) => {
 
   return (
     <div className="py-16">
-      {/* <ProjectHeader /> */}
       <SectionList sections={project.sections} projectId={project.id} />
-      {/* <ProjectFooter /> */}
     </div>
   );
 };

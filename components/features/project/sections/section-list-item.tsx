@@ -1,5 +1,5 @@
 import React from "react";
-import SectionContainer from "./section-container";
+import SectionContainer from "../section-container/section-container";
 import TextEditor from "../text-section/text-editor";
 import { $Enums } from "@/lib/generated/prisma";
 import { SectionWithAll } from "@/lib/project/types";

@@ -11,14 +11,21 @@ type Props = {
   section: SectionWithAll;
 };
 
-const SectionMenu = ({ section: { id, text, isReversed, image } }: Props) => {
+const SectionContainerMenu = ({ section: { id, text, isReversed, image } }: Props) => {
   return (
-    <MenuBar
-      className={cn(
-        "absolute top-1/2 -translate-y-1/2 -right-12",
+    <div className={cn(
+        "absolute top-1/2 -translate-y-1/2 -right-12 z-30",
         "group-hover:-translate-x-16",
         "duration-300"
-      )}
+
+        // "h-full py-8",
+        // "absolute -right-12 z-30",
+        // "group-hover:-translate-x-19",
+        // "duration-300"
+      )}>
+
+    <MenuBar
+      className={cn("sticky top-20")}
       direction="vertical"
     >
       <DeleteDialog action={deleteSection.bind(null, { id })}>
@@ -33,7 +40,9 @@ const SectionMenu = ({ section: { id, text, isReversed, image } }: Props) => {
 
       {text && image && <TextImageSwapButton isReversed={isReversed} id={id} />}
     </MenuBar>
+    </div>
+
   );
 };
 
-export default SectionMenu;
+export default SectionContainerMenu;

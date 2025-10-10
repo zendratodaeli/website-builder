@@ -1,6 +1,6 @@
 import Container from "@/components/core/container";
-import ProjectsHeading from "@/components/pages/projects/projects-heading";
-import ProjectsList from "@/components/pages/projects/projects-list";
+import ProjectsHeading from "@/components/features/projects/projects-heading";
+import ProjectsList from "@/components/features/projects/projects-list";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

@@ -29,7 +29,7 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "sticky top-0 bg-background z-10",
+        "sticky top-0 bg-background z-60",
         isProjectPage && "dark"
       )}
       suppressHydrationWarning
