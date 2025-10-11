@@ -19,13 +19,20 @@ export const getProjectWithAll = async (id: Project["id"]) => {
           index: "asc",
         },
         include: {
-          text: {
+          items: {
+            orderBy: {
+              index: "asc",
+            },
             include: {
-              externalLink: true,
+              text: {
+                include: {
+                  externalLink: true,
+                },
+              },
+              image: true,
+              video: true,
             },
           },
-          image: true,
-          video: true
         },
       },
     },

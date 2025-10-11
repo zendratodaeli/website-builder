@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { ReactNode } from "react";
 import SectionOptions from "./section-options";
-import { $Enums, Section } from "@/lib/generated/prisma";
+import { Section, SectionType } from "@/lib/generated/prisma";
 import { VideoForm } from "../video-section/video-form";
 import useSectionOptions from "@/hooks/use-section-options";
 
@@ -29,7 +29,7 @@ const SectionOptionsDialog = ({ children, projectId, index }: Props) => {
     createSectionWithType,
     handleDialogChange,
     handleSelect,
-  } = useSectionOptions({index, projectId});
+  } = useSectionOptions({ index, projectId });
 
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>
@@ -41,11 +41,13 @@ const SectionOptionsDialog = ({ children, projectId, index }: Props) => {
           </DialogTitle>
         </DialogHeader>
 
-        {selectedType === $Enums.SectionType.Video ? (
+        {selectedType?.includes(SectionType.Video) && (
           <VideoForm
             onSubmit={createSectionWithType.bind(null, selectedType)}
           />
-        ) : (
+        )}
+        
+        {!selectedType?.includes(SectionType.Video) && (
           <>
             <SectionOptions onSelect={handleSelect} />
             <DialogFooter>

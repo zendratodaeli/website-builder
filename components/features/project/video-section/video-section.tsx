@@ -45,8 +45,7 @@ const VideoSection = ({ video: { url, id } }: Props) => {
   };
 
   return (
-    <div className="relative mb-10">
-      {/* toolbar */}
+    <div className="relative">
       {isEditMode && (
         <MenuBar ref={toolbarRef} className="absolute -top-14 left-0">
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -60,15 +59,11 @@ const VideoSection = ({ video: { url, id } }: Props) => {
                 <DialogTitle>Edit Video</DialogTitle>
                 <DialogDescription>Add video url to replace</DialogDescription>
               </DialogHeader>
-
-              {/* video form */}
-              <VideoForm url={url} id={id} onSubmit={updateUrl} />
+              <VideoForm url={url} onSubmit={updateUrl} />
             </DialogContent>
           </Dialog>
         </MenuBar>
       )}
-
-      {/* wrapper of the image section */}
 
       <button
         ref={wrapperRef}

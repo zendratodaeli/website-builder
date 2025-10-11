@@ -20,11 +20,15 @@ export const updateVideo = async ({
     },
     data,
     include: {
-      section: true,
+      sectionItem: {
+        include: {
+          section: true,
+        }
+      }
     },
   });
 
-  revalidatePath(`/projects/${updated.section.projectId}`);
+  revalidatePath(`/projects/${updated.sectionItem.section.projectId}`);
 
   return {
     code: StatusCode.Ok,

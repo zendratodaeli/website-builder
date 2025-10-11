@@ -9,12 +9,12 @@ datasource db {
 }
 
 model Project {
-  id Int @id @default(autoincrement())
-  title String @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  userId String @map("user_id")
-  sections Section[]
+  id        Int       @id @default(autoincrement())
+  title     String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  userId    String    @map("user_id")
+  sections  Section[]
 
   @@index([userId, createdAt(sort: Desc)])
   @@map("projects")
@@ -29,43 +29,60 @@ enum SectionType {
 }
 
 model Section {
-  id Int @id @default(autoincrement())
-  type SectionType
-  index Int
-  isReversed Boolean @default(false) @map("is_reversed")
-  paddingTop Int @default(60) @map("padding_top")
-  paddingBottom Int @default(60) @map("padding_bottom")
-  projectId Int @map("project_id")
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  text Text?
-  image Image?
-  video Video?
+  id            Int         @id @default(autoincrement())
+  type          SectionType
+  index         Int
+  paddingTop    Int         @default(60) @map("padding_top")
+  paddingBottom Int         @default(60) @map("padding_bottom")
+  projectId     Int         @map("project_id")
+  project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  items SectionItem[]
 
   @@index([projectId, index(sort: Asc)])
   @@map("sections")
 }
 
+enum SectionItemType {
+  Text
+  Image
+  Video
+}
+
+model SectionItem {
+  id    Int             @id @default(autoincrement())
+  type  SectionItemType
+  index Int
+  text  Text?
+  image Image?
+  video Video?
+  sectionId Int         @map("section_id")
+  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  
+  @@index([sectionId, index(sort: Asc)])
+  @@map("section_items")
+}
+
 model Image {
-  id Int @id @default(autoincrement())
-  url String @default("https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
-  alt String @default("Nias Food")
-  caption String @default("")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  sectionId Int @unique @map("section_id")
-  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  id            Int         @id @default(autoincrement())
+  url           String      @default("https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+  alt           String      @default("Nias Food")
+  caption       String      @default("")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  sectionItemId Int         @unique @map("section_item_id")
+  sectionItem   SectionItem @relation(fields: [sectionItemId], references: [id], onDelete: Cascade)
 
   @@map("images")
 }
 
 model Video {
-  id Int @id @default(autoincrement())
-  url String
-  caption String @default("")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  sectionId Int @unique @map("section_id")
-  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  id            Int         @id @default(autoincrement())
+  url           String
+  caption       String      @default("")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  sectionItemId Int         @unique @map("section_item_id")
+  sectionItem   SectionItem @relation(fields: [sectionItemId], references: [id], onDelete: Cascade)
 
   @@map("videos")
 }
@@ -77,25 +94,24 @@ enum RowPosition {
 }
 
 model Text {
-  id Int @id @default(autoincrement())
-  content String @default("<h1>This is your heading</h1><p>You can write here as much as you want!</p>")
-  rowPosition RowPosition @default(Left)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  sectionId Int @unique @map("section_id")
-  section Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  externalLink ExternalLink?
+  id            Int           @id @default(autoincrement())
+  content       String        @default("<h1>This is your heading</h1><p>You can write here as much as you want!</p>")
+  rowPosition   RowPosition   @default(Left)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  sectionItemId Int           @unique @map("section_item_id")
+  sectionItem   SectionItem   @relation(fields: [sectionItemId], references: [id], onDelete: Cascade)
+  externalLink  ExternalLink?
 
-  @@index([sectionId])
   @@map("texts")
 }
 
 model ExternalLink {
-  id Int @id @default(autoincrement())
-  label String @default("Details")
-  url String @default("")
-  textId Int @unique @map("text_id")
-  text Text @relation(fields: [textId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  label     String   @default("Details")
+  url       String   @default("")
+  textId    Int      @unique @map("text_id")
+  text      Text     @relation(fields: [textId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

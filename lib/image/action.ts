@@ -21,7 +21,7 @@ export const updateImage = async (
     alt: formData.get("alt"),
   });
 
-   if (!validation.success) {
+  if (!validation.success) {
     const tree = treeifyError(validation.error);
 
     // ✅ new correct structure
@@ -58,11 +58,15 @@ export const updateImage = async (
         alt: validation.data.alt,
       },
       include: {
-        section: true
-      }
+        sectionItem: {
+          include: {
+            section: true,
+          },
+        },
+      },
     });
 
-    revalidatePath(`/projects/${updated.section.projectId}`)
+    revalidatePath(`/projects/${updated.sectionItem.section.projectId}`);
 
     return {
       code: StatusCode.Ok,

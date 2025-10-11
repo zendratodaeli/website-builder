@@ -16,15 +16,19 @@ export const createExternalLink = async (
       include: {
         text: {
           include: {
-            section: {
-              select: { projectId: true },
-            },
+            sectionItem: {
+              include: {
+                  section: {
+                    select: { projectId: true },
+                  },
+              }
+            }
           },
         },
       },
     });
 
-    revalidatePath(`/projects/${created.text.section.projectId}`);
+    revalidatePath(`/projects/${created.text.sectionItem.section.projectId}`);
 
     return {
       code: StatusCode.Created,
@@ -73,15 +77,19 @@ export const updateExternalLink = async (
       include: {
         text: {
           include: {
-            section: {
-              select: { projectId: true },
-            },
+            sectionItem: {
+              include: {
+                  section: {
+                    select: { projectId: true },
+                  },
+              }
+            }
           },
         },
       },
     });
 
-    revalidatePath(`/projects/${updated.text.section.projectId}`);
+    revalidatePath(`/projects/${updated.text.sectionItem.section.projectId}`);
 
     return {
       code: StatusCode.Ok,
@@ -121,15 +129,19 @@ export const deleteExternalLink = async (
       include: {
         text: {
           include: {
-            section: {
-              select: { projectId: true },
-            },
+            sectionItem: {
+              include: {
+                  section: {
+                    select: { projectId: true },
+                  },
+              }
+            }
           },
         },
       },
     });
 
-    revalidatePath(`/projects/${deleted.text.section.projectId}`);
+    revalidatePath(`/projects/${deleted.text.sectionItem.section.projectId}`);
 
     return {
       code: StatusCode.Ok,

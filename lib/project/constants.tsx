@@ -36,4 +36,9 @@ export const SECTION_OPTIONS = [
     icon: <Video className="size-10 group-hover:bg-accent" />,
     type: $Enums.SectionType.Video,
   },
+  {
+    label: "Text & Video",
+    icon: <LayoutList className="size-10 group-hover:bg-accent" />,
+    type: $Enums.SectionType.TextVideo,
+  },
 ] as const;

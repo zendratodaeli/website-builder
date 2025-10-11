@@ -11,6 +11,7 @@ type Props = {
 };
 
 const SectionList = ({ sections, projectId }: Props) => {
+  
   return (
     <>
       {sections.map((section) => (

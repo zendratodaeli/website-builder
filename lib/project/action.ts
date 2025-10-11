@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { $Enums, Prisma, Section, Video } from "../generated/prisma";
+import { Prisma, Section, SectionItemType, Video } from "../generated/prisma";
 import { prisma } from "../prisma";
 import { ActionsState, StatusCode } from "../types";
 
@@ -25,25 +25,44 @@ export const createSection = async ({
         data: { index: { increment: 1 } },
       });
 
-      const isTextRequired =
-        type === $Enums.SectionType.Text ||
-        type === $Enums.SectionType.TextImage;
-      const isImageRequired =
-        type === $Enums.SectionType.Image ||
-        type === $Enums.SectionType.TextImage;
-      const isVideoRequired =
-        type === $Enums.SectionType.Video && url;
-
-      return prisma.section.create({
+      const section = await prisma.section.create({
         data: {
           index,
           type,
           projectId,
-          ...(isTextRequired && { text: { create: {} } }),
-          ...(isImageRequired && { image: { create: {} } }),
-          ...(isVideoRequired && { video: { create: { url } } }),
         },
       });
+
+      if(type.includes(SectionItemType.Text)) {
+        await prisma.sectionItem.create({ data: {
+          sectionId: section.id,
+          index: 0,
+          type: SectionItemType.Text,
+          text: { create: {}},
+        }})
+      }
+
+      if(type.includes(SectionItemType.Image)) {
+        await prisma.sectionItem.create({ data: {
+          sectionId: section.id,
+          index: 1,
+          type: SectionItemType.Image,
+          image: { create: {}},
+        }})
+      }
+
+      if(type.includes(SectionItemType.Video) && url) {
+        await prisma.sectionItem.create({ data: {
+          sectionId: section.id,
+          index: 2,
+          type: SectionItemType.Video,
+          video: { create: {
+            url
+          }},
+        }})
+      }
+
+      return section;
     });
 
     revalidatePath(`/projects/${projectId}`);

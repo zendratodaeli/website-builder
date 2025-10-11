@@ -32,7 +32,6 @@ export function VideoForm({ url = "", onSubmit }: Props) {
 
   function handleSubmit(values: z.infer<typeof VideoFormSchema>) {
    const embedUrl = getYouTubeEmbedUrl(values.url);
-   
    onSubmit(embedUrl)
   }
 

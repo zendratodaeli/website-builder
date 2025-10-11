@@ -34,10 +34,13 @@ const useSectionOptions = ({ index, projectId }: Options) => {
   };
 
   const handleSelect = async (type: $Enums.SectionType) => {
-    if (type === $Enums.SectionType.Video) {
+    if (type.includes($Enums.SectionType.Video)) {
       setSelectedType(type);
+      
     } else {
       createSectionWithType(type);
+      setIsOpen(false);
+      setSelectedType(null);
     }
   };
 

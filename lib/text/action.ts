@@ -34,15 +34,19 @@ export const updateText = async ({
       },
       data,
       include: {
-        section: {
-          select: {
-            projectId: true,
-          },
-        },
+        sectionItem: {
+          include: {
+            section: {
+              select: {
+                projectId: true,
+              },
+            },
+          }
+        }
       },
     });
 
-    revalidatePath(`/projects/${updated.section.projectId}`);
+    revalidatePath(`/projects/${updated.sectionItem.section.projectId}`);
 
     return {
       code: StatusCode.Ok,
