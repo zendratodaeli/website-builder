@@ -26,6 +26,8 @@ enum SectionType {
   TextImage
   Video
   TextVideo
+  GalleryGrid
+  GalleryCarousel
 }
 
 model Section {

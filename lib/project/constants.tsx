@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ImagePlus, LayoutList, ListPlus, Video } from "lucide-react";
+import { ArrowLeft, ArrowRight, ImagePlus, LayoutGrid, LayoutList, ListPlus, Video } from "lucide-react";
 import { DirectionEnum } from "./types";
 import { $Enums } from "../generated/prisma";
 
@@ -39,6 +39,11 @@ export const SECTION_OPTIONS = [
   {
     label: "Text & Video",
     icon: <LayoutList className="size-10 group-hover:bg-accent" />,
+    type: $Enums.SectionType.TextVideo,
+  },
+  {
+    label: "Gallery",
+    icon: <LayoutGrid className="size-10 group-hover:bg-accent" />,
     type: $Enums.SectionType.TextVideo,
   },
 ] as const;

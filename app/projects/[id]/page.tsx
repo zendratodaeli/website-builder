@@ -1,4 +1,4 @@
-import SectionList from "@/components/features/project/sections/section-list";
+import AdjustableContainer from "@/components/layouts/adjustable-container";
 import { getProjectWithAll } from "@/lib/project";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -6,7 +6,6 @@ import React from "react";
 type Props = {
   params: Promise<{ id: string }>;
 };
-
 
 const ProjectPage = async ({ params }: Props) => {
   const { id } = await params;
@@ -19,7 +18,7 @@ const ProjectPage = async ({ params }: Props) => {
 
   return (
     <div className="py-16">
-      <SectionList sections={project.sections} projectId={project.id} />
+      <AdjustableContainer sections={project.sections} projectId={project.id} />
     </div>
   );
 };
