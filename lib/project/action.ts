@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Prisma, Section, SectionItemType, Video } from "../generated/prisma";
+import { Prisma, Section, SectionItemType, SectionType, Video } from "../generated/prisma";
 import { prisma } from "../prisma";
 import { ActionsState, StatusCode } from "../types";
+import { GALLERY_PLACEHOLDERS } from "../section-item/constants";
 
 type CreateSectionPayload = Pick<Section, "index" | "type" | "projectId"> & {
   url?: Video["url"]
@@ -60,6 +61,21 @@ export const createSection = async ({
             url
           }},
         }})
+      }
+
+      if(type === SectionType.GalleryGrid) {
+        const queries = GALLERY_PLACEHOLDERS.map((url, index) => 
+          prisma.sectionItem.create({
+            data: {
+              type: SectionType.Image,
+              index,
+              sectionId: section.id,
+              image: {create: {url, alt: "Food Image Placeholder"}}
+            }
+          })
+        );
+        
+        await Promise.all(queries);
       }
 
       return section;

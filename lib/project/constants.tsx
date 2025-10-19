@@ -44,6 +44,6 @@ export const SECTION_OPTIONS = [
   {
     label: "Gallery",
     icon: <LayoutGrid className="size-10 group-hover:bg-accent" />,
-    type: $Enums.SectionType.TextVideo,
+    type: $Enums.SectionType.GalleryGrid,
   },
 ] as const;

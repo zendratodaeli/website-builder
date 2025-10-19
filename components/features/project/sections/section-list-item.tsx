@@ -6,6 +6,7 @@ import { SectionWithAll } from "@/lib/project/types";
 import ImageSection from "../image-section/image-section";
 import VideoSection from "../video-section/video-section";
 import SectionItemReorder from "./section-item-reorder";
+import GalleryGridSection from "../gallery-section/gallery-grid-section";
 
 type Props = {
   section: SectionWithAll;
@@ -14,12 +15,13 @@ type Props = {
 const SectionListItem = ({ section }: Props) => {
   const {type, items } = section;
 
-  const text = items[0].text;
+  const text = items[0]?.text;
   const isTextSection = type === SectionType.Text && text;
-  const image = items[0].image;
+  const image = items[0]?.image;
   const isImageSection = type === SectionType.Image && image;
-  const video = items[0].video;
+  const video = items[0]?.video;
   const isVideoSection = type === SectionType.Video && video;
+  const isGallerySection = type === SectionType.GalleryGrid;
   const isReorderable = type === SectionType.TextImage || type === SectionType.TextVideo;
   
   return (
@@ -32,6 +34,8 @@ const SectionListItem = ({ section }: Props) => {
           sectionItems={items}
         />
       )}
+      {isGallerySection && <GalleryGridSection sectionItems={items} />}
+
     </SectionContainer>
   );
 };

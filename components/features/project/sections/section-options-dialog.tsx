@@ -34,7 +34,7 @@ const SectionOptionsDialog = ({ children, projectId, index }: Props) => {
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="z-1000">
         <DialogHeader>
           <DialogTitle className="text-center">
             Add a section to your website

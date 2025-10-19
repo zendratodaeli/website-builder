@@ -12,15 +12,16 @@ import {
 import useOutsideClick from "@/hooks/use-outside-click";
 import { type Image as ImageType } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import ImageUpdateForm from "./image-update-form";
 
 type Props = {
   image: ImageType;
+  onDelete?: () => void;
 };
-const ImageSection = ({ image }: Props) => {
+const ImageSection = ({ image, onDelete }: Props) => {
   const { alt, caption, url } = image;
   const wrapperRef = useRef<HTMLButtonElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -56,6 +57,10 @@ const ImageSection = ({ image }: Props) => {
 
             </DialogContent>
           </Dialog>
+            
+          {onDelete && <MenuBarItem onClick={onDelete} variant={"destructive"} >
+            <Trash/>
+          </MenuBarItem>}
         </MenuBar>
       )}
 
@@ -70,7 +75,7 @@ const ImageSection = ({ image }: Props) => {
         onClick={handleEditMode}
       >
         <figure className="pointer-events-none">
-          <Image src={url} width={1200} height={1200} alt={alt} />
+          <Image className="aspect-square" src={url} width={1200} height={1200} alt={alt} />
           <figcaption>{caption}</figcaption>
         </figure>
       </button>

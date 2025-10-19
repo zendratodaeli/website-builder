@@ -54,7 +54,7 @@ const VideoSection = ({ video: { url, id } }: Props) => {
                 <Pencil />
               </MenuBarItem>
             </DialogTrigger>
-            <DialogContent ref={portalRef}>
+            <DialogContent ref={portalRef} className="z-1000">
               <DialogHeader>
                 <DialogTitle>Edit Video</DialogTitle>
                 <DialogDescription>Add video url to replace</DialogDescription>
