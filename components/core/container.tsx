@@ -14,7 +14,7 @@ const Container = ({
 }: Props) => {
   const Comp = asChild ? Slot : "div";
   return (
-    <Comp className={cn("container mx-auto p-8", className)} {...rest}>
+    <Comp className={cn("container mx-auto p-12", className)} {...rest}>
       {children}
     </Comp>
   );

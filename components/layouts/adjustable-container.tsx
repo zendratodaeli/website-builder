@@ -54,7 +54,7 @@ export default function AdjustableContainer({ sections, projectId }: Props) {
     widthOptions.find((opt) => opt.value === selectedWidth)?.label || "7xl";
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-8">
       {/* Header with dropdown */}
       <div className="w-full flex flex-col items-center gap-2">
         <h3 className="text-sm font-medium text-muted-foreground">

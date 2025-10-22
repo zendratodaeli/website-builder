@@ -7,6 +7,8 @@ import ImageSection from "../image-section/image-section";
 import VideoSection from "../video-section/video-section";
 import SectionItemReorder from "./section-item-reorder";
 import GalleryGridSection from "../gallery-section/gallery-grid-section";
+import GalleryCarouselSeciton from "../gallery-section/gallery-carousel-section";
+import { cn } from "@/lib/utils";
 
 type Props = {
   section: SectionWithAll;
@@ -21,11 +23,12 @@ const SectionListItem = ({ section }: Props) => {
   const isImageSection = type === SectionType.Image && image;
   const video = items[0]?.video;
   const isVideoSection = type === SectionType.Video && video;
-  const isGallerySection = type === SectionType.GalleryGrid;
+  const isGalleryGridSection = type === SectionType.GalleryGrid;
+  const isGalleryCarouselSection = type === SectionType.GalleryCarousel;
   const isReorderable = type === SectionType.TextImage || type === SectionType.TextVideo;
   
   return (
-    <SectionContainer section={section}>
+    <SectionContainer className={cn(isGalleryCarouselSection && "max-w-none px-0")} section={section}>
       {isTextSection && <TextEditor text={text} />}
       {isImageSection && <ImageSection image={image} />}
       {isVideoSection && <VideoSection video={video} />}
@@ -34,7 +37,8 @@ const SectionListItem = ({ section }: Props) => {
           sectionItems={items}
         />
       )}
-      {isGallerySection && <GalleryGridSection sectionItems={items} />}
+      {isGalleryGridSection && <GalleryGridSection sectionItems={items} />}
+      {isGalleryCarouselSection && <GalleryCarouselSeciton sectionItems={items}/>}
 
     </SectionContainer>
   );

@@ -25,7 +25,10 @@ const GallerySectionAdd = ({sectionId}: Props) => {
   const createImageSectionItem = async (url: Image["url"], alt?: Image["alt"]) => {
     const {data, message} = await createSectionItem(sectionId, url, alt)
     
-    if(data) return toast.message(message);
+    if(data) {
+      toast.message(message)
+      setIsOpen(false);
+    }
 
   }
 

@@ -13,35 +13,55 @@ import useOutsideClick from "@/hooks/use-outside-click";
 import { type Image as ImageType } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
 import { Pencil, Trash } from "lucide-react";
-import Image from "next/image";
-import { useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import ImageUpdateForm from "./image-update-form";
+import { updateImage } from "@/lib/image/action";
+import { ActionsState, StatusCode } from "@/lib/types";
+import { toast } from "sonner";
+import Image from "next/image";
 
 type Props = {
   image: ImageType;
   onDelete?: () => void;
 };
 const ImageSection = ({ image, onDelete }: Props) => {
-  const { alt, caption, url } = image;
+  const { id, alt, caption, url } = image;
   const wrapperRef = useRef<HTMLButtonElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const portalRef = useRef<HTMLDivElement>(null);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  useOutsideClick([wrapperRef, toolbarRef, portalRef], () => {
-    setIsEditMode(false);
-  });
+  const updateImageWithId = updateImage.bind(null, id);
+  const [{ code, data, message, error }, action] = useActionState<
+    ActionsState<ImageType>,
+    FormData
+  >(updateImageWithId, {});
+
+  useEffect(() => {
+    if (data) {
+      toast.success(message);
+      setIsOpen(false);
+    }
+
+    if (error && code !== StatusCode.BadRequest) {
+      toast.error(error.message);
+    }
+  }, [code, data, error, message]);
 
   const handleEditMode = () => {
     setIsEditMode(true);
   };
 
+  useOutsideClick([wrapperRef, toolbarRef, portalRef], () => {
+    setIsEditMode(false);
+  });
+
   return (
     <div className="relative">
-      {/* toolbar */}
       {isEditMode && (
         <MenuBar ref={toolbarRef} className="absolute -top-14 left-0">
-          <Dialog>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <MenuBarItem>
                 <Pencil />
@@ -53,18 +73,17 @@ const ImageSection = ({ image, onDelete }: Props) => {
                 <DialogDescription>Add image url to replace</DialogDescription>
               </DialogHeader>
 
-              <ImageUpdateForm image={image} />
-
+              <ImageUpdateForm action={action} image={image} />
             </DialogContent>
           </Dialog>
-            
-          {onDelete && <MenuBarItem onClick={onDelete} variant={"destructive"} >
-            <Trash/>
-          </MenuBarItem>}
+
+          {onDelete && (
+            <MenuBarItem onClick={onDelete} variant={"destructive"}>
+              <Trash />
+            </MenuBarItem>
+          )}
         </MenuBar>
       )}
-
-      {/* wrapper of the image section */}
 
       <button
         ref={wrapperRef}
@@ -75,7 +94,13 @@ const ImageSection = ({ image, onDelete }: Props) => {
         onClick={handleEditMode}
       >
         <figure className="pointer-events-none">
-          <Image className="aspect-square" src={url} width={1200} height={1200} alt={alt} />
+          <Image
+            className="aspect-square"
+            src={url}
+            width={1200}
+            height={1200}
+            alt={alt}
+          />
           <figcaption>{caption}</figcaption>
         </figure>
       </button>

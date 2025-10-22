@@ -7,10 +7,12 @@ import SectionContainerMenu from "./section-container-menu";
 import useDebounce from "@/hook/use-debounce";
 import { updateSection } from "@/lib/project/action";
 import SectionContainerPaddings from "./section-container-paddings";
+import { cn } from "@/lib/utils";
 
 type Props = {
   children: ReactNode;
   section: SectionWithAll;
+  className?: string
 };
 
 export type Padding = {
@@ -18,7 +20,7 @@ export type Padding = {
   paddingBottom: number;
 };
 
-const SectionContainer = ({ children, section }: Props) => {
+const SectionContainer = ({ children, section, className }: Props) => {
   const [{ paddingTop, paddingBottom }, setPadding] = useState<Padding>({
     paddingTop: section.paddingTop,
     paddingBottom: section.paddingBottom,
@@ -49,6 +51,7 @@ const SectionContainer = ({ children, section }: Props) => {
       />
 
       <Container
+        className={cn(className)}
         style={{ paddingTop, paddingBottom, transition: "padding 0.2s ease" }}
       >
         {children}

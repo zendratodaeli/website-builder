@@ -1,4 +1,4 @@
-import { Plus, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DeleteDialog from "@/components/core/delete-dialog";
 import { deleteSection } from "@/lib/project/action";
@@ -8,6 +8,8 @@ import { SectionWithAll } from "@/lib/project/types";
 import { SectionType } from "@/lib/generated/prisma";
 import ReorderButton from "../sections/reorder-button";
 import GallerySectionAdd from "../gallery-section/gallery-section-add";
+import GallerySectionToCarousel from "../gallery-section/gallery-section-to-carousel";
+import GallerySectionToGrid from "../gallery-section/gallery-section-to-grid";
 
 type Props = {
   section: SectionWithAll;
@@ -16,10 +18,12 @@ type Props = {
 const SectionContainerMenu = ({ section: { id, items, type } }: Props) => {
   const text = items[0]?.text;
   const isTextSection = type === SectionType.Text && text;
-  const isGallerySection = type === SectionType.GalleryGrid;
-
   const isReorderable =
     type === SectionType.TextImage || type === SectionType.TextVideo;
+
+  const isGalleryGridSection = type === SectionType.GalleryGrid;
+  const isGalleryCarouselSection = type === SectionType.GalleryCarousel;
+  const isGallerySection = isGalleryGridSection || isGalleryCarouselSection;
 
   return (
     <div
@@ -47,9 +51,12 @@ const SectionContainerMenu = ({ section: { id, items, type } }: Props) => {
 
         {isReorderable && <ReorderButton sectionItems={items} />}
 
-        {isGallerySection && (
-          <GallerySectionAdd sectionId={id}/>
-        )}
+        {isGallerySection && <GallerySectionAdd sectionId={id} />}
+
+        {isGalleryGridSection && <GallerySectionToCarousel id={id} />}
+
+        {isGalleryCarouselSection && <GallerySectionToGrid id={id} />}
+
       </MenuBar>
     </div>
   );
