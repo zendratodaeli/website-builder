@@ -1,3 +1,5 @@
+"use client"
+
 import { ReactNode } from "react";
 import {
   arrayMove,
@@ -50,9 +52,11 @@ export const SortableList = <T extends { id: UniqueIdentifier }>({
 
 type SortableItemProps = {
   children: ReactNode;
+  className?: string;
+  activatorClassname?: string;
 } & Arguments;
 
-export function SortableItem({ children, ...rest }: SortableItemProps) {
+export function SortableItem({ children, className, activatorClassname,...rest }: SortableItemProps) {
   const { isDragging, attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } =
     useSortable({ ...rest });
 
@@ -62,11 +66,21 @@ export function SortableItem({ children, ...rest }: SortableItemProps) {
   };
 
   return (
-    <li className="relative group/drag" ref={setNodeRef} style={style} {...attributes}>
-      <button className="absolute top-0 -left-11 px-4 pb-4 invisible group-hover/drag:visible active:visible cursor-grab" ref={setActivatorNodeRef} {...listeners}>
+    <li 
+    className={className}
+      ref={setNodeRef} 
+      style={style} 
+      {...attributes}
+    suppressHydrationWarning
+    >
+      <button 
+        ref={setActivatorNodeRef} 
+        {...listeners}
+        className={activatorClassname}
+      >
         <GripVertical/>
       </button>
-      <div className={cn(isDragging && "rotate-2 scale-105")}>
+      <div className={cn(isDragging && "rotate-2 scale-105", "flex-1")}>
         {children}
       </div>
 

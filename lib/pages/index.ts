@@ -1,17 +1,19 @@
 import { auth } from "@clerk/nextjs/server";
-import { Project } from "../generated/prisma";
+import { Page } from "../generated/prisma";
 import { prisma } from "../prisma";
 
-export const getProjectWithAll = async (id: Project["id"]) => {
+export const getPageWithAll = async (
+  projectId: Page["projectId"],
+  href: Page["href"]
+) => {
   const { userId } = await auth();
   if (!userId) {
     return null;
   }
 
-  return await prisma.project.findUnique({
+  return await prisma.page.findUnique({
     where: {
-      id,
-      userId,
+      href_projectId: {projectId, href}
     },
     include: {
       sections: {

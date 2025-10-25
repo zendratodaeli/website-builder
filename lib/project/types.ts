@@ -1,4 +1,4 @@
-import { getProjectWithAll } from ".";
+import { getProjectWithAll } from "../pages";
 import { ExternalLink, Prisma, Text } from "../generated/prisma";
 
 export type ProjectWithAll = NonNullable<

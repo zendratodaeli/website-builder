@@ -29,7 +29,12 @@ const GalleryGridSection = ({ sectionItems }: Props) => {
   return (
     <SortableList className="grid grid-cols-4 gap-8" items={optimisticItem} onReorder={handleReorder}>
       {sectionItems.map((item) => (
-        <SortableItem key={item.id} id={item.id}>
+        <SortableItem
+          key={item.id} 
+          className="relative group/drag" 
+          id={item.id}
+          activatorClassname="absolute top-0 -left-11 px-4 pb-4 invisible group-hover/drag:visible active:visible cursor-grab" 
+        >
           {item.image && (
             <ImageSection
               image={item.image}

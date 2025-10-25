@@ -8,18 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Project {
-  id        Int       @id @default(autoincrement())
-  title     String    @unique
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  userId    String    @map("user_id")
-  sections  Section[]
-
-  @@index([userId, createdAt(sort: Desc)])
-  @@map("projects")
-}
-
 enum SectionType {
   Text
   Image
@@ -30,36 +18,74 @@ enum SectionType {
   GalleryCarousel
 }
 
-model Section {
-  id            Int         @id @default(autoincrement())
-  type          SectionType
-  index         Int
-  paddingTop    Int         @default(60) @map("padding_top")
-  paddingBottom Int         @default(60) @map("padding_bottom")
-  projectId     Int         @map("project_id")
-  project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  items SectionItem[]
-
-  @@index([projectId, index(sort: Asc)])
-  @@map("sections")
-}
-
 enum SectionItemType {
   Text
   Image
   Video
 }
 
+enum RowPosition {
+  Left
+  Center
+  Right
+}
+
+model Project {
+  id        Int       @id @default(autoincrement())
+  title     String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  userId    String    @map("user_id")
+  sections  Section[]
+  pages     Page[]
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("projects")
+}
+
+model Page {
+  id        Int       @id @default(autoincrement())
+  index     Int
+  href      String
+  label     String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  projectId Int       @map("project_id")
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sections  Section[]
+
+  @@map("pages")
+  @@index([projectId, index(sort: Asc)])
+  @@unique([href, projectId])
+}
+
+model Section {
+  id            Int           @id @default(autoincrement())
+  type          SectionType
+  index         Int
+  paddingTop    Int           @default(60) @map("padding_top")
+  paddingBottom Int           @default(60) @map("padding_bottom")
+  projectId     Int           @map("project_id")
+  project       Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  pageId        Int           @map("page_id")
+  page          Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  items         SectionItem[]
+
+  @@index([projectId, index(sort: Asc)])
+  @@index([pageId, index(sort: Asc)])
+  @@map("sections")
+}
+
 model SectionItem {
-  id    Int             @id @default(autoincrement())
-  type  SectionItemType
-  index Int
-  text  Text?
-  image Image?
-  video Video?
-  sectionId Int         @map("section_id")
-  section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  
+  id        Int             @id @default(autoincrement())
+  type      SectionItemType
+  index     Int
+  text      Text?
+  image     Image?
+  video     Video?
+  sectionId Int             @map("section_id")
+  section   Section         @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
   @@index([sectionId, index(sort: Asc)])
   @@map("section_items")
 }
@@ -87,12 +113,6 @@ model Video {
   sectionItem   SectionItem @relation(fields: [sectionItemId], references: [id], onDelete: Cascade)
 
   @@map("videos")
-}
-
-enum RowPosition {
-  Left
-  Center
-  Right
 }
 
 model Text {

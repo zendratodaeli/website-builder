@@ -1,4 +1,5 @@
 import { PrismaClient } from "@/lib/generated/prisma";
+import { DEFAULT_PAGES } from "@/lib/pages/constants";
 
 const prisma = new PrismaClient();
 
@@ -9,22 +10,58 @@ async function run() {
     data: {
       title: "My First Project",
       userId: "user_331U8WOs3xWJPi81cJOy926vrv2",
-      sections: {
-        create: [
-          {
-            type: "Text",
-            index: 0,
-            items: {
-              create: {
-                type: "Text",
-                index: 0,
-                text: {
-                  create: {},
-                },
-              },
-            },
+      pages: {
+        createMany: {
+          data: DEFAULT_PAGES.map(({ href, label }, index) => ({
+            href,
+            label,
+            index,
+          })),
+        },
+      },
+      
+    },
+    include: {
+      pages: {
+        orderBy: {
+          index: "asc",
+        },
+      },
+    },
+  });
+
+  await prisma.section.create({
+    data: {
+      projectId: project.id,
+      pageId: project.pages[1].id,
+      type: "Text",
+      index: 0,
+      items: {
+        create: {
+          type: "Text",
+          index: 0,
+          text: {
+            create: {},
           },
-        ],
+        },
+      },
+    },
+  });
+
+  await prisma.section.create({
+    data: {
+      projectId: project.id,
+      pageId: project.pages[0].id,
+      type: "Text",
+      index: 0,
+      items: {
+        create: {
+          type: "Text",
+          index: 0,
+          text: {
+            create: {},
+          },
+        },
       },
     },
   });
@@ -42,7 +79,8 @@ async function run() {
           },
         },
       },
-      projectId: project.id,
+    projectId: project.id,
+    pageId: project.pages[0].id,
     },
   });
 
@@ -62,6 +100,7 @@ async function run() {
         },
       },
       projectId: project.id,
+      pageId: project.pages[0].id,
     },
   });
 
@@ -70,6 +109,7 @@ async function run() {
       index: 3,
       type: "TextImage",
       projectId: project.id,
+      pageId: project.pages[0].id,
     },
   });
 
@@ -80,9 +120,9 @@ async function run() {
         type: "Text",
         index: 0,
         text: {
-          create: {}
-        }
-      }
+          create: {},
+        },
+      },
     }),
     prisma.sectionItem.create({
       data: {
@@ -90,11 +130,11 @@ async function run() {
         type: "Image",
         index: 1,
         image: {
-          create: {}
-        }
-      }
-    }) 
-  ])
+          create: {},
+        },
+      },
+    }),
+  ]);
 
   console.log(`Successfully inserted projects data`);
 }
