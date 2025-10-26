@@ -1,13 +1,13 @@
-import { getProjectWithAll } from "../pages";
+import { getPageWithAll } from "../pages";
 import { ExternalLink, Prisma, Text } from "../generated/prisma";
 
-export type ProjectWithAll = NonNullable<
-  Prisma.PromiseReturnType<typeof getProjectWithAll>
+export type PageWithAll = NonNullable<
+  Prisma.PromiseReturnType<typeof getPageWithAll>
 >;
 
 export type TextWithExternalLink = Text & { externalLink: ExternalLink | null}
 
-export type SectionWithAll = ProjectWithAll["sections"][number];
+export type SectionWithAll = PageWithAll["sections"][number];
 
 export type SectionItemWithAll = SectionWithAll["items"][number];
 

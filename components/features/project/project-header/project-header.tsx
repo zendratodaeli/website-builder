@@ -1,6 +1,5 @@
 import Container from "@/components/core/container";
-import { Page, Project } from "@/lib/generated/prisma";
-import { DEFAULT_PAGES } from "@/lib/pages/constants";
+import { Page } from "@/lib/generated/prisma";
 import Link from "next/link";
 import React from "react";
 import ProjectHeaderMenu from "./project-header-menu";

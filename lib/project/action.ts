@@ -6,7 +6,7 @@ import { prisma } from "../prisma";
 import { ActionsState, StatusCode } from "../types";
 import { GALLERY_PLACEHOLDERS } from "../section-item/constants";
 
-type CreateSectionPayload = Pick<Section, "index" | "type" | "projectId"> & {
+type CreateSectionPayload = Pick<Section, "index" | "type" | "projectId" | "pageId"> & {
   url?: Video["url"]
 };
 
@@ -14,7 +14,8 @@ export const createSection = async ({
   index,
   type,
   projectId,
-  url
+  url,
+  pageId
 }: CreateSectionPayload): Promise<ActionsState<Section>> => {
   try {
     const created = await prisma.$transaction(async () => {
@@ -28,6 +29,7 @@ export const createSection = async ({
 
       const section = await prisma.section.create({
         data: {
+          pageId,
           index,
           type,
           projectId,

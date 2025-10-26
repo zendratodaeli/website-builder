@@ -20,16 +20,17 @@ type Props = {
   children: ReactNode;
   projectId: Section["projectId"];
   index: Section["index"];
+  pageId: Section["pageId"];
 };
 
-const SectionOptionsDialog = ({ children, projectId, index }: Props) => {
+const SectionOptionsDialog = ({ children, projectId, index, pageId }: Props) => {
   const {
     isOpen,
     selectedType,
     createSectionWithType,
     handleDialogChange,
     handleSelect,
-  } = useSectionOptions({ index, projectId });
+  } = useSectionOptions({ index, projectId, pageId });
 
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>

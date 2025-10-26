@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import SectionList from "../features/project/sections/section-list";
-import { ProjectWithAll } from "@/lib/project/types";
-import { Project } from "@/lib/generated/prisma";
+import { Project, Section } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
 
 import {
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronDown } from "lucide-react";
+import { PageWithAll } from "@/lib/project/types";
 
 const widthOptions = [
   { label: "Width Full", value: "w-full" },
@@ -33,11 +33,12 @@ const widthOptions = [
 ];
 
 type Props = {
-  sections: ProjectWithAll["sections"];
+  sections: PageWithAll["sections"];
   projectId: Project["id"];
+  pageId: Section["pageId"]
 };
 
-export default function AdjustableContainer({ sections, projectId }: Props) {
+export default function AdjustableContainer({ sections, projectId, pageId }: Props) {
   const [selectedWidth, setSelectedWidth] = useState("max-w-7xl");
   const [open, setOpen] = useState(false);
 
@@ -113,7 +114,7 @@ export default function AdjustableContainer({ sections, projectId }: Props) {
           "w-full mx-auto transition-all duration-300"
         )}
       >
-        <SectionList sections={sections} projectId={projectId} />
+        <SectionList sections={sections} projectId={projectId} pageId={pageId} />
       </div>
     </div>
   );

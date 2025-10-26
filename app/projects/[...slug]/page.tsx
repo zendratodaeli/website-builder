@@ -19,7 +19,7 @@ const ProjectPage = async ({ params }: Props) => {
   return (
     <div>
       {/* <AdjustableContainer sections={project.sections} projectId={project.id} /> */}
-      <SectionList sections={page.sections} projectId={page.id} />
+      <SectionList sections={page.sections} projectId={page.projectId} pageId={page.id} />
     </div>
   );
 };

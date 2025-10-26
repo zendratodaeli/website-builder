@@ -6,9 +6,10 @@ import { toast } from "sonner";
 type Options = {
   index: Section["index"],
   projectId: Section["projectId"];
+  pageId: Section["pageId"]
 };
 
-const useSectionOptions = ({ index, projectId }: Options) => {
+const useSectionOptions = ({ index, projectId, pageId }: Options) => {
   const [selectedType, setSelectedType] = useState<$Enums.SectionType | null>(
     null
   );
@@ -19,6 +20,7 @@ const useSectionOptions = ({ index, projectId }: Options) => {
     url?: Video["url"]
   ) => {
     const { data, error, message } = await createSection({
+      pageId,
       index,
       projectId,
       type,

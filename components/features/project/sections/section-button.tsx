@@ -7,6 +7,7 @@ import { Section } from "@/lib/generated/prisma";
 type Props = {
   projectId: Section["projectId"];
   index: Section["index"];
+  pageId: Section["pageId"];
 };
 
 const SectionButton = ({ ...rest }: Props) => {
