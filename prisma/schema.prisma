@@ -56,7 +56,7 @@ model Page {
 
   @@map("pages")
   @@index([projectId, index(sort: Asc)])
-  @@unique([href, projectId])
+  @@unique([projectId, href])
 }
 
 model Section {

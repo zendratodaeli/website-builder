@@ -13,7 +13,7 @@ export const getPageWithAll = async (
 
   return await prisma.page.findUnique({
     where: {
-      href_projectId: {projectId, href}
+      projectId_href: {projectId, href}
     },
     include: {
       sections: {

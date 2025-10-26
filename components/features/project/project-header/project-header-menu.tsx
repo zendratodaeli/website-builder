@@ -10,10 +10,9 @@ const ProjectHeaderMenu = () => {
   return (
     <div
       className={cn(
-        "h-full py-8",
-        "absolute -right-12 z-30",
-        "group-hover:-translate-x-19",
-        "duration-300"
+        "absolute right-0 top-0 h-full py-8 z-30",
+        "translate-x-full group-hover:-translate-x-7",
+        "transition-transform duration-300 ease-in-out"
       )}
     >
       <MenuBar className={cn("sticky top-20")} direction="vertical">

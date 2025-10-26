@@ -10,7 +10,7 @@ type Props = {
 
 const ProjectHeader = ({pages}: Props) => {
   return (
-  <header className="group">
+  <header className="relative group overflow-hidden">
     <ProjectHeaderMenu/>
     <Container>
       <nav>

@@ -1,6 +1,6 @@
 import ProjectHeader from "@/components/features/project/project-header/project-header";
 import { ProjectSidebar } from "@/components/layouts/project-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
@@ -41,13 +41,13 @@ const Layout = async ({ children, params }: Props) => {
 
   if(!project) {
     notFound();
-  }
+  };
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <ProjectSidebar pages={project.pages} />
+      <ProjectSidebar pages={project?.pages} />
       <div className="flex-1">
-        <ProjectHeader pages={project.pages} />
+        <ProjectHeader pages={project?.pages} />
         {children}
       </div>
     </SidebarProvider>

@@ -5,28 +5,37 @@ import { Project } from "../generated/prisma";
 import { prisma } from "../prisma";
 import { ActionsState, StatusCode } from "../types";
 import { auth } from "@clerk/nextjs/server";
+import { DEFAULT_PAGES } from "../pages/constants";
 
 type CreateProjectPayload = {
-title: Project["title"];
-}
+  title: Project["title"];
+};
 
 export const createProject = async ({
   title,
 }: CreateProjectPayload): Promise<ActionsState<Project>> => {
+  const { userId } = await auth();
 
-  const { userId } = await auth()
-  
-    if(!userId) {
-      return {
-        code: StatusCode.Unauthorized,
-        error: new Error("User must be authenticated")
-      }
-    }
+  if (!userId) {
+    return {
+      code: StatusCode.Unauthorized,
+      error: new Error("User must be authenticated"),
+    };
+  }
   try {
     const project = await prisma.project.create({
       data: {
         title,
-        userId
+        userId,
+        pages: {
+          createMany: {
+            data: DEFAULT_PAGES.map(({ href, label }, index) => ({
+              href,
+              label,
+              index,
+            })),
+          },
+        },
       },
     });
 
@@ -53,80 +62,76 @@ export const updateProject = async ({
 }: UpdateProjectPayload): Promise<ActionsState<Project>> => {
   try {
     const project = await prisma.project.findUnique({
-      where: { id }
+      where: { id },
     });
 
-    if(!project) {
+    if (!project) {
       return {
         code: StatusCode.NotFound,
-        error: new Error(`NotFound, project with ${id}`)
+        error: new Error(`NotFound, project with ${id}`),
       };
-    };
+    }
 
     const updated = await prisma.project.update({
       where: {
-        id
+        id,
       },
       data: {
-        title
-      }
-    })
+        title,
+      },
+    });
 
     revalidatePath("/projects");
 
     return {
       code: StatusCode.Ok,
       data: updated,
-      message: "Successfully updated project!"
-    }
-
+      message: "Successfully updated project!",
+    };
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return {
       code: StatusCode.InternalServerError,
-      error: new Error("Something went wrong wrong while updating")
-    }
+      error: new Error("Something went wrong wrong while updating"),
+    };
   }
-}
+};
 
-
-type DeleteProjectPayload = Pick<Project, "id">
+type DeleteProjectPayload = Pick<Project, "id">;
 
 export const deleteProject = async ({
-  id
+  id,
 }: DeleteProjectPayload): Promise<ActionsState<Project>> => {
   try {
     const project = await prisma.project.findUnique({
-      where: { id }
+      where: { id },
     });
 
-    if(!project) {
+    if (!project) {
       return {
         code: StatusCode.NotFound,
-        error: new Error(`NotFound, project with ${id}`)
+        error: new Error(`NotFound, project with ${id}`),
       };
-    };
+    }
 
     const deleted = await prisma.project.delete({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
 
     revalidatePath("/projects");
 
     return {
       code: StatusCode.Ok,
       data: deleted,
-      message: "Successfully deleted project!"
-    }
-
+      message: "Successfully deleted project!",
+    };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return {
       code: StatusCode.InternalServerError,
-      error: new Error("Something went wrong wrong while deleting project")
-    }
+      error: new Error("Something went wrong wrong while deleting project"),
+    };
   }
-}
-
+};
