@@ -1,6 +1,6 @@
 import React from "react";
 import SectionContainer from "../section-container/section-container";
-import TextEditor from "../text-section/text-editor";
+import TextSection from "../text-section/text-section";
 import { SectionType } from "@/lib/generated/prisma";
 import { SectionWithAll } from "@/lib/project/types";
 import ImageSection from "../image-section/image-section";
@@ -29,7 +29,7 @@ const SectionListItem = ({ section }: Props) => {
   
   return (
     <SectionContainer className={cn(isGalleryCarouselSection && "max-w-none px-0")} section={section}>
-      {isTextSection && <TextEditor text={text} />}
+      {isTextSection && <TextSection text={text} />}
       {isImageSection && <ImageSection image={image} />}
       {isVideoSection && <VideoSection video={video} />}
       {isReorderable && (

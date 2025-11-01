@@ -8,7 +8,8 @@ type Options = {
 };
 export default function useTextEditorStates({ position }: Options) {
   const editorRef = useRef<HTMLDivElement>(null);
-  const toolbarRef = useRef<HTMLDivElement>(null);
+  const portalRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const [isEditButtonShown, setIsEditButtonShown] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -40,7 +41,8 @@ export default function useTextEditorStates({ position }: Options) {
 
   return {
     editorRef,
-    toolbarRef,
+    menuRef,
+    portalRef,
     isEditButtonShown,
     isEditable,
     rowPosition,

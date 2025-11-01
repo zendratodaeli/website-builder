@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { updateText } from "@/lib/text/action";
 import { debounce } from "@/lib/utils";
 import useTextEditorStates from "./use-text-editor-states";
+import { Color, TextStyle } from '@tiptap/extension-text-style'
 
 type Options = {
   id: Text["id"];
@@ -16,10 +17,10 @@ type Options = {
 };
 
 const useTextEditor = ({ position, id, content }: Options) => {
-  const { reset, isEditable, toolbarRef, editorRef, rowPosition, ...rest } =
+  const { reset, isEditable, menuRef, portalRef, editorRef, rowPosition, ...rest } =
     useTextEditorStates({ position });
 
-  useOutsideClick([editorRef, toolbarRef], () => {
+  useOutsideClick([editorRef, menuRef, portalRef], () => {
     reset();
   });
 
@@ -55,6 +56,7 @@ const useTextEditor = ({ position, id, content }: Options) => {
         TextAlign.configure({
           types: ["heading", "paragraph"],
         }),
+        TextStyle, Color
       ],
       onUpdate: async ({ editor }) => {
         const updatedContent = editor.getHTML();
@@ -79,7 +81,8 @@ const useTextEditor = ({ position, id, content }: Options) => {
   return {
     editor,
     editorRef,
-    toolbarRef,
+    menuRef,
+    portalRef,
     reset,
     isEditable,
     debounceAndUpdate,

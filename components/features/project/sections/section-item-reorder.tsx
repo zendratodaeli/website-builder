@@ -1,7 +1,7 @@
 "use client";
 
 import { SectionItemWithAll } from "@/lib/project/types";
-import TextEditor from "../text-section/text-editor";
+import TextSection from "../text-section/text-section";
 import ImageSection from "../image-section/image-section";
 import { cn } from "@/lib/utils";
 import { Reorder } from "motion/react";
@@ -30,7 +30,7 @@ const SectionItemReorder = ({sectionItems}: Props) => {
     >
       {sectionItems.map((item) => (
         <Reorder.Item className="flex-1" key={item.id} value={item}>
-          { item.text && <TextEditor text={item.text} />}
+          { item.text && <TextSection text={item.text} />}
           { item.image && <ImageSection image={item.image} />}
           { item.video && <VideoSection video={item.video} />}
         </Reorder.Item>

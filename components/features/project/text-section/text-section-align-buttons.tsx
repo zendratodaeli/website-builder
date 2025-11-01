@@ -25,7 +25,7 @@ const ALIGNMENTS = [
   },
 ]
 
-const TextAlignButtons = ({ editor }: Props) => {
+const TextSectionAlignButtons = ({ editor }: Props) => {
   return (
     <>
 
@@ -42,4 +42,4 @@ const TextAlignButtons = ({ editor }: Props) => {
   );
 };
 
-export default TextAlignButtons;
+export default TextSectionAlignButtons;

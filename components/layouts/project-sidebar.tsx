@@ -15,7 +15,6 @@ type Props = {
 };
 
 export function ProjectSidebar({ pages }: Props) {
-  console.log(pages, "pages")
   return (
     <Sidebar className="dark text-foreground pt-33 bg-black">
       <SidebarHeader />

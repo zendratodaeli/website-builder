@@ -4,7 +4,7 @@ import UseTextEditor from "@/hooks/use-text-editor";
 import { $Enums } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
 import { EditorContent } from "@tiptap/react";
-import TextEditorTools from "./text-editor-tools";
+import TextSectionMenu from "./text-section-menu";
 import { TextWithExternalLink } from "@/lib/project/types";
 import { Button } from "@/components/ui/button";
 import UpdateExternalLinkPopover from "../external-link/update-external-link-popover";
@@ -14,7 +14,7 @@ type Props = {
   text: TextWithExternalLink;
 };
 
-const TextEditor = ({
+const TextSection = ({
   text: { id, content, externalLink, rowPosition: position },
 }: Props) => {
   const {
@@ -22,8 +22,9 @@ const TextEditor = ({
     rowPosition,
     editorRef,
     isEditable,
+    portalRef,
     isEditButtonShown,
-    toolbarRef,
+    menuRef,
     reset,
     handleEditMode,
     handlePositionChange,
@@ -65,8 +66,9 @@ const TextEditor = ({
         )}
 
         {isEditButtonShown && (
-          <TextEditorTools
-            ref={toolbarRef}
+          <TextSectionMenu
+            menuRef={menuRef}
+            portalRef={portalRef}
             editor={editor}
             onEditButtonClick={handleEditMode}
             isEditable={isEditable}
@@ -83,4 +85,4 @@ const TextEditor = ({
   );
 };
 
-export default TextEditor;
+export default TextSection;
