@@ -1,42 +1,19 @@
 "use server";
 
-import z, { treeifyError } from "zod";
-import { Image } from "../generated/prisma";
+import { Image, Prisma } from "../generated/prisma";
 import { ActionsState, StatusCode } from "../types";
 import { prisma } from "../prisma";
 import { revalidatePath } from "next/cache";
 
-const updateImageSchema = z.object({
-  url: z.string().nonempty({ message: "This field is required" }),
-  alt: z.string().optional(),
-});
+type UpdateImageUpload = {
+  id: Image["id"];
+  data: Prisma.ImageUpdateInput;
+};
 
-export const updateImage = async (
-  id: Image["id"],
-  state: ActionsState<Image>,
-  formData: FormData
-): Promise<ActionsState<Image>> => {
-  const validation = updateImageSchema.safeParse({
-    url: formData.get("url"),
-    alt: formData.get("alt"),
-  });
-
-  if (!validation.success) {
-    const tree = treeifyError(validation.error);
-
-    // ✅ new correct structure
-    const firstError =
-      tree.properties?.url?.errors?.[0] ||
-      tree.properties?.alt?.errors?.[0] ||
-      tree.errors?.[0] ||
-      "Invalid input";
-
-    return {
-      code: StatusCode.BadRequest,
-      error: new Error(firstError),
-    };
-  }
-
+export const updateImage = async ({
+  id,
+  data,
+}: UpdateImageUpload): Promise<ActionsState<Image>> => {
   try {
     const image = await prisma.image.findUnique({
       where: { id },
@@ -53,10 +30,7 @@ export const updateImage = async (
       where: {
         id,
       },
-      data: {
-        url: validation.data.url,
-        alt: validation.data.alt,
-      },
+      data,
       include: {
         sectionItem: {
           include: {

@@ -47,7 +47,7 @@ export function ImageForm({ url = "", alt="", onSubmit }: Props) {
                 <Textarea placeholder="Enter valid image url" {...field} />
               </FormControl>
               <FormDescription>
-                URL.
+                Enter the image url.
               </FormDescription>
               <FormMessage />
             </FormItem>
