@@ -1,45 +1,19 @@
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
-import { useCallback, useEffect } from "react";
-import { $Enums, Text } from "@/lib/generated/prisma";
-import useOutsideClick from "./use-outside-click";
-import { toast } from "sonner";
-import { updateText } from "@/lib/text/action";
-import { debounce } from "@/lib/utils";
-import useTextEditorStates from "./use-text-editor-states";
-import { Color, TextStyle } from '@tiptap/extension-text-style'
+import { useState } from "react";
+import { Color, TextStyle } from "@tiptap/extension-text-style";
+import useDebounce from "@/hooks/use-debounce";
 
 type Options = {
-  id: Text["id"];
-  content: Text["content"];
-  position: $Enums.RowPosition;
+  isEditable: boolean;
+  content: string;
 };
 
-const useTextEditor = ({ position, id, content }: Options) => {
-  const { reset, isEditable, menuRef, portalRef, editorRef, rowPosition, ...rest } =
-    useTextEditorStates({ position });
+const useTextEditor = ({ isEditable, content: contentFromDB }: Options) => {
+  const [content, setContent] = useState<string>(contentFromDB);
 
-  useOutsideClick([editorRef, menuRef, portalRef], () => {
-    reset();
-  });
-
-  const update = async (
-    id: Text["id"],
-    content: Text["content"],
-    rowPosition: Text["rowPosition"]
-  ) => {
-    const { data, error, message } = await updateText({
-      id,
-      data: { content, rowPosition },
-    });
-
-    if (data) return toast.success(message);
-    if (error) return toast.error(error.message);
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceAndUpdate = useCallback(debounce(update, 500), []);
+  const debouncedContent = useDebounce(content, 2000);
 
   const editor = useEditor(
     {
@@ -56,39 +30,20 @@ const useTextEditor = ({ position, id, content }: Options) => {
         TextAlign.configure({
           types: ["heading", "paragraph"],
         }),
-        TextStyle, Color
+        TextStyle,
+        Color,
       ],
       onUpdate: async ({ editor }) => {
         const updatedContent = editor.getHTML();
 
-        debounceAndUpdate(id, updatedContent, rowPosition);
+        setContent(updatedContent);
+
       },
     },
     [isEditable]
   );
 
-  useEffect(() => {
-    if (editor && rowPosition !== position) {
-      editor
-        .chain()
-        .focus("all")
-        .setTextAlign(rowPosition.toLowerCase())
-        .blur()
-        .run();
-    }
-  }, [editor, position, rowPosition]);
-
-  return {
-    editor,
-    editorRef,
-    menuRef,
-    portalRef,
-    reset,
-    isEditable,
-    debounceAndUpdate,
-    rowPosition,
-    ...rest,
-  };
+  return {editor, debouncedContent};
 };
 
 export default useTextEditor;

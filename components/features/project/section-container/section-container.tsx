@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import Container from "@/components/core/container";
 import { SectionWithAll } from "@/lib/project/types";
 import SectionContainerMenu from "./section-container-menu";
-import useDebounce from "@/hook/use-debounce";
+import useDebounce from "@/hooks/use-debounce";
 import { updateSection } from "@/lib/project/action";
 import SectionContainerPaddings from "./section-container-paddings";
 import { cn } from "@/lib/utils";
@@ -51,7 +51,7 @@ const SectionContainer = ({ children, section, className }: Props) => {
       />
 
       <Container
-        className={cn(className)}
+        className={cn("grid",className)}
         style={{ paddingTop, paddingBottom, transition: "padding 0.2s ease" }}
       >
         {children}

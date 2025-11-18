@@ -1,7 +1,6 @@
 "use client";
 
-import UseTextEditor from "@/hooks/use-text-editor";
-import { $Enums } from "@/lib/generated/prisma";
+import { RowPosition, Text } from "@/lib/generated/prisma";
 import { cn } from "@/lib/utils";
 import { EditorContent } from "@tiptap/react";
 import TextSectionMenu from "./text-section-menu";
@@ -9,6 +8,14 @@ import { TextWithExternalLink } from "@/lib/project/types";
 import { Button } from "@/components/ui/button";
 import UpdateExternalLinkPopover from "../external-link/update-external-link-popover";
 import TextSectionPosition from "./text-section-position";
+import { useCallback, useEffect } from "react";
+import { updateText } from "@/lib/text/action";
+import { toast } from "sonner";
+import useSectionWrapper from "@/hooks/use-section-wrapper";
+import SectionWrapper from "../section-wrapper/section-wrapper";
+import useTextEditor from "@/hooks/use-text-editor";
+import useRowPosition from "@/hooks/use-row-position";
+import useActionToast from "@/hooks/use-action-toast";
 
 type Props = {
   text: TextWithExternalLink;
@@ -18,70 +25,90 @@ const TextSection = ({
   text: { id, content, externalLink, rowPosition: position },
 }: Props) => {
   const {
-    editor,
-    rowPosition,
-    editorRef,
-    isEditable,
-    portalRef,
-    isEditButtonShown,
     menuRef,
+    wrapperRef,
+    portalRef,
+    isMenuShown,
+    isEditable,
     reset,
-    handleEditMode,
-    handlePositionChange,
-  } = UseTextEditor({
+    activateEditMode,
+  } = useSectionWrapper();
+
+  const { editor, debouncedContent } = useTextEditor({
+    isEditable: isEditable,
     content,
-    id,
-    position,
   });
+  const { rowPosition, changePosition } = useRowPosition({ position });
+  const toast = useActionToast();
+
+  const update = useCallback(async (
+    id: Text["id"],
+    content: Text["content"],
+    rowPosition: Text["rowPosition"]
+  ) => {
+    const state = await updateText({id, data: { content, rowPosition },});
+    toast(state);
+  }, [toast]);
+
+  const alignText = useCallback((textAlign: string) => {
+    editor?.chain().focus("all").setTextAlign(textAlign).blur().run();
+  }, [editor])
+
+  useEffect(() => {
+    if (content !== debouncedContent) {
+      update(id, content, rowPosition);
+    }
+  }, [content, debouncedContent, id, rowPosition, update]);
+
+  useEffect(() => {
+    if (rowPosition !== position) {
+      alignText(rowPosition.toLowerCase())
+    }
+  }, [alignText, position, rowPosition]);
 
   if (!editor) return null;
 
+  const positionStyle = {
+    [RowPosition.Left]: "",
+    [RowPosition.Center]: "items-center justify-self-center",
+    [RowPosition.Right]: "items-end justify-self-end",
+  };
+
   return (
-    <div
+    <SectionWrapper
+      wrapperRef={wrapperRef}
+      isMenuShown={isMenuShown}
+      onClick={activateEditMode}
       className={cn(
-        "flex",
-        rowPosition === $Enums.RowPosition.Center && "justify-center",
-        rowPosition === $Enums.RowPosition.Right && "justify-end"
+        "p-1 max-w-[800px]",
+        "border border-transparent",
+        "flex flex-col gap-8 items-start",
+        positionStyle[rowPosition],
+        isEditable && "outline-ring/50 outline-dashed border-primary"
       )}
     >
-      <div
-        ref={editorRef}
-        className={cn(
-          "p-1 max-w-[800px] relative",
-          "border border-transparent hover:border-border",
-          "flex flex-col gap-8 items-start",
-          rowPosition === $Enums.RowPosition.Center && "items-center",
-          rowPosition === $Enums.RowPosition.Right && "items-end",
-          isEditButtonShown && "outline outline-offset-4 outline-primary",
-          isEditable && "outline-ring/50 outline-dashed border-primary"
-        )}
-        onClick={handleEditMode}
-      >
-        <EditorContent editor={editor} />
+      <EditorContent editor={editor} />
 
-        {externalLink && (
-          <UpdateExternalLinkPopover externalLink={externalLink}>
-            <Button onClick={reset}>{externalLink?.label}</Button>
-          </UpdateExternalLinkPopover>
-        )}
+      {externalLink && (
+        <UpdateExternalLinkPopover externalLink={externalLink}>
+          <Button onClick={reset}>{externalLink?.label}</Button>
+        </UpdateExternalLinkPopover>
+      )}
 
-        {isEditButtonShown && (
-          <TextSectionMenu
-            menuRef={menuRef}
-            portalRef={portalRef}
-            editor={editor}
-            onEditButtonClick={handleEditMode}
-            isEditable={isEditable}
-          />
-        )}
-        <TextSectionPosition
-          rowPosition={rowPosition}
-          onPositionChange={(direction) => {
-            handlePositionChange(rowPosition, direction);
-          }}
+      {isMenuShown && (
+        <TextSectionMenu
+          menuRef={menuRef}
+          portalRef={portalRef}
+          editor={editor}
+          isEditable={isEditable}
+          onEditButtonClick={activateEditMode}
         />
-      </div>
-    </div>
+      )}
+      <TextSectionPosition
+        rowPosition={rowPosition}
+        onPositionChange={changePosition}
+      />
+    </SectionWrapper>
   );
 };
 

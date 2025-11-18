@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useDebounce from "@/hook/use-debounce";
+import useDebounce from "@/hooks/use-debounce";
 import { Project } from "@/lib/generated/prisma";
 import { updateProject, UpdateProjectPayload } from "@/lib/projects/actions";
 import Form from "next/form";
