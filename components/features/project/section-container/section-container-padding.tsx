@@ -35,7 +35,7 @@ const SectionContainerPadding = ({
           position === "top" ? "top-4" : "bottom-4"
         )}
       >
-        <MenuBarItem onClick={onIncrement} disabled={padding >= 100}>
+        <MenuBarItem onClick={onIncrement}>
           <ArrowUp />
         </MenuBarItem>
         <MenuBarItem onClick={onDecrement} disabled={padding <= 0}>
@@ -45,7 +45,7 @@ const SectionContainerPadding = ({
       </MenuBar>
       <div
         style={{ height: padding }}
-        className="peer-hover/padding:bg-blue-100"
+        className="peer-hover/padding:bg-blue-100/50"
       ></div>
     </div>
   );

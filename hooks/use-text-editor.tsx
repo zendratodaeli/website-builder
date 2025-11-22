@@ -13,7 +13,7 @@ type Options = {
 const useTextEditor = ({ isEditable, content: contentFromDB }: Options) => {
   const [content, setContent] = useState<string>(contentFromDB);
 
-  const debouncedContent = useDebounce(content, 2000);
+  const debouncedContent = useDebounce(content, 3000);
 
   const editor = useEditor(
     {

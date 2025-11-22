@@ -41,28 +41,34 @@ const TextSection = ({
   const { rowPosition, changePosition } = useRowPosition({ position });
   const toast = useActionToast();
 
-  const update = useCallback(async (
-    id: Text["id"],
-    content: Text["content"],
-    rowPosition: Text["rowPosition"]
-  ) => {
-    const state = await updateText({id, data: { content, rowPosition },});
-    toast(state);
-  }, [toast]);
+  const update = useCallback(
+    async (
+      id: Text["id"],
+      content: Text["content"],
+      rowPosition: Text["rowPosition"]
+    ) => {
+      const state = await updateText({ id, data: { content, rowPosition } });
+      toast(state);
+    },
+    [toast]
+  );
 
-  const alignText = useCallback((textAlign: string) => {
-    editor?.chain().focus("all").setTextAlign(textAlign).blur().run();
-  }, [editor])
+  const alignText = useCallback(
+    (textAlign: string) => {
+      editor?.chain().focus("all").setTextAlign(textAlign).blur().run();
+    },
+    [editor]
+  );
 
   useEffect(() => {
-    if (content !== debouncedContent) {
-      update(id, content, rowPosition);
+    if (debouncedContent !== content) {
+      update(id, debouncedContent, rowPosition);
     }
   }, [content, debouncedContent, id, rowPosition, update]);
 
   useEffect(() => {
     if (rowPosition !== position) {
-      alignText(rowPosition.toLowerCase())
+      alignText(rowPosition.toLowerCase());
     }
   }, [alignText, position, rowPosition]);
 

@@ -1,4 +1,4 @@
-import { Trash } from "lucide-react";
+import { BarChartHorizontal, ImageIcon, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DeleteDialog from "@/components/core/delete-dialog";
 import { deleteSection } from "@/lib/project/action";
@@ -10,12 +10,19 @@ import ReorderButton from "../sections/reorder-button";
 import GallerySectionAdd from "../gallery-section/gallery-section-add";
 import GallerySectionToCarousel from "../gallery-section/gallery-section-to-carousel";
 import GallerySectionToGrid from "../gallery-section/gallery-section-to-grid";
+import BackgroundPopover from "../background/background-popover";
+import { Attribute } from "./section-container";
 
 type Props = {
   section: SectionWithAll;
+  attribute: Attribute;
+  onAttributeChange: (attribute: Attribute) => void;
 };
 
-const SectionContainerMenu = ({ section: { id, items, type } }: Props) => {
+const SectionContainerMenu = ({ 
+  section: { id, items, type }, 
+  attribute, onAttributeChange 
+}: Props) => {
   const text = items[0]?.text;
   const isTextSection = type === SectionType.Text && text;
   const isReorderable =
@@ -34,7 +41,7 @@ const SectionContainerMenu = ({ section: { id, items, type } }: Props) => {
 
         "h-full py-8",
         "absolute -right-12 z-30",
-        "group-hover:-translate-x-19",
+        "group-hover:-translate-x-19 has-[[data-state=open]]:-translate-x-16",
         "duration-300"
       )}
     >
@@ -46,7 +53,14 @@ const SectionContainerMenu = ({ section: { id, items, type } }: Props) => {
         </DeleteDialog>
 
         {isTextSection && (
-          <AddLinkButton textId={text.id} linkId={text.externalLink?.id} />
+          <>
+            <AddLinkButton textId={text.id} linkId={text.externalLink?.id} />
+
+            <MenuBarItem>
+              <ImageIcon/>
+            </MenuBarItem>
+            <BackgroundPopover attribute={attribute} onAttributeChange={onAttributeChange}/>  
+          </>
         )}
 
         {isReorderable && <ReorderButton sectionItems={items} />}
