@@ -1,4 +1,4 @@
-import { BarChartHorizontal, ImageIcon, Trash } from "lucide-react";
+import { BarChartHorizontal, ImageIcon, ImageMinus, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DeleteDialog from "@/components/core/delete-dialog";
 import { deleteSection } from "@/lib/project/action";
@@ -12,16 +12,22 @@ import GallerySectionToCarousel from "../gallery-section/gallery-section-to-caro
 import GallerySectionToGrid from "../gallery-section/gallery-section-to-grid";
 import BackgroundPopover from "../background/background-popover";
 import { Attribute } from "./section-container";
+import BackgroundAddDialog from "../background/background-add-dialog";
 
 type Props = {
   section: SectionWithAll;
   attribute: Attribute;
+  backgroundImage: string | null;
+  onBackgroundChange: (image: string | null) => void;
   onAttributeChange: (attribute: Attribute) => void;
 };
 
-const SectionContainerMenu = ({ 
-  section: { id, items, type }, 
-  attribute, onAttributeChange 
+const SectionContainerMenu = ({
+  section: { id, items, type },
+  attribute,
+  backgroundImage,
+  onAttributeChange,
+  onBackgroundChange,
 }: Props) => {
   const text = items[0]?.text;
   const isTextSection = type === SectionType.Text && text;
@@ -55,11 +61,20 @@ const SectionContainerMenu = ({
         {isTextSection && (
           <>
             <AddLinkButton textId={text.id} linkId={text.externalLink?.id} />
-
-            <MenuBarItem>
-              <ImageIcon/>
-            </MenuBarItem>
-            <BackgroundPopover attribute={attribute} onAttributeChange={onAttributeChange}/>  
+            {backgroundImage ? (
+              <>
+                <MenuBarItem onClick={() => onBackgroundChange(null)}>
+                  <ImageMinus />
+                </MenuBarItem>
+                <BackgroundPopover
+                  attribute={attribute}
+                  onAttributeChange={onAttributeChange}
+                />
+              </>
+            ) : (
+              <BackgroundAddDialog onBackgroundAdd={onBackgroundChange}/>
+              
+            )}
           </>
         )}
 
@@ -70,7 +85,6 @@ const SectionContainerMenu = ({
         {isGalleryGridSection && <GallerySectionToCarousel id={id} />}
 
         {isGalleryCarouselSection && <GallerySectionToGrid id={id} />}
-
       </MenuBar>
     </div>
   );

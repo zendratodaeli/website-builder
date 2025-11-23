@@ -37,8 +37,9 @@ const SectionContainer = ({ children, section, className }: Props) => {
     1000
   );
 
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [attribute, setAttribute] = useState<Attribute>({opacity: 1, blur: 0})
-
+  
   const changeAttribute = (attributes: Attribute) => {
     setAttribute(attributes)
   }
@@ -55,17 +56,20 @@ const SectionContainer = ({ children, section, className }: Props) => {
 
   return (
     <section className="relative overflow-x-clip group">
-
-      <Image
-        style={{ opacity: attribute.opacity, filter: `blur(${attribute.blur}px)`}}
-        src="https://images.unsplash.com/photo-1761839262867-af53d08b0eb5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        fill
-        alt="background-image"
-      />
+      {backgroundImage && (
+        <Image
+          style={{ opacity: attribute.opacity, filter: `blur(${attribute.blur}px)`}}
+          src={backgroundImage}
+          fill
+          alt="background-image"
+        />
+      )}
       
       <SectionContainerMenu 
         section={section} 
         attribute={attribute}
+        backgroundImage={backgroundImage}
+        onBackgroundChange={setBackgroundImage}
         onAttributeChange={changeAttribute}
       />
 
