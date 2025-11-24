@@ -36,7 +36,7 @@ export function ImageForm({ url = "", alt="", onSubmit }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8 z-1500">
         <FormField
           control={form.control}
           name="url"

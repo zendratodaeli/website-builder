@@ -70,10 +70,25 @@ model Section {
   pageId        Int           @map("page_id")
   page          Page          @relation(fields: [pageId], references: [id], onDelete: Cascade)
   items         SectionItem[]
+  background SectionBackground?
 
   @@index([projectId, index(sort: Asc)])
   @@index([pageId, index(sort: Asc)])
   @@map("sections")
+}
+
+model SectionBackground {
+  id         Int      @id @default(autoincrement())
+  url        String
+  alt        String   @default("")
+  opacity    Float    @default(1)
+  blur       Int      @default(0)
+  createAt   DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  sectionId  Int      @unique @map("section_id")
+  section    Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@map("section_backgrounds")
 }
 
 model SectionItem {
