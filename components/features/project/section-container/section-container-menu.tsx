@@ -5,7 +5,7 @@ import { deleteSection } from "@/lib/project/action";
 import MenuBar, { MenuBarItem } from "@/components/core/menubar";
 import AddLinkButton from "../external-link/add-link-button";
 import { SectionWithAll } from "@/lib/project/types";
-import { SectionType } from "@/lib/generated/prisma";
+import { SectionBackground, SectionType } from "@/lib/generated/prisma";
 import ReorderButton from "../sections/reorder-button";
 import GallerySectionAdd from "../gallery-section/gallery-section-add";
 import GallerySectionToCarousel from "../gallery-section/gallery-section-to-carousel";
@@ -17,17 +17,20 @@ import BackgroundAddDialog from "../background/background-add-dialog";
 type Props = {
   section: SectionWithAll;
   attribute: Attribute;
-  backgroundImage: string | null;
-  onBackgroundChange: (image: string | null) => void;
   onAttributeChange: (attribute: Attribute) => void;
+  onAddBackground: (
+    url: SectionBackground["url"], 
+    alt?: SectionBackground["alt"]
+  ) => void;
+  onDeleteBackground: (id: SectionBackground["id"]) => void;
 };
 
 const SectionContainerMenu = ({
-  section: { id, items, type },
+  section: { id, items, type, background },
   attribute,
-  backgroundImage,
   onAttributeChange,
-  onBackgroundChange,
+  onAddBackground,
+  onDeleteBackground
 }: Props) => {
   const text = items[0]?.text;
   const isTextSection = type === SectionType.Text && text;
@@ -61,9 +64,9 @@ const SectionContainerMenu = ({
         {isTextSection && (
           <>
             <AddLinkButton textId={text.id} linkId={text.externalLink?.id} />
-            {backgroundImage ? (
+            {background ? (
               <>
-                <MenuBarItem onClick={() => onBackgroundChange(null)}>
+                <MenuBarItem onClick={() => onDeleteBackground(background.id)}>
                   <ImageMinus />
                 </MenuBarItem>
                 <BackgroundPopover
@@ -72,7 +75,7 @@ const SectionContainerMenu = ({
                 />
               </>
             ) : (
-              <BackgroundAddDialog onBackgroundAdd={onBackgroundChange}/>
+              <BackgroundAddDialog onAddBackground={onAddBackground}/>
               
             )}
           </>

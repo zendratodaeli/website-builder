@@ -46,8 +46,6 @@ export const updateText = async ({
       },
     });
 
-    console.log(updated, "updated")
-
     revalidatePath(`/projects/${updated.sectionItem.section.projectId}`);
 
     return {

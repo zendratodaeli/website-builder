@@ -9,6 +9,9 @@ import { updateSection } from "@/lib/project/action";
 import SectionContainerPaddings from "./section-container-paddings";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { SectionBackground } from "@/lib/generated/prisma";
+import useActionToast from "@/hooks/use-action-toast";
+import { createBackground, deleteBackground } from "@/lib/background/action";
 
 type Props = {
   children: ReactNode;
@@ -27,6 +30,8 @@ export type Padding = {
 };
 
 const SectionContainer = ({ children, section, className }: Props) => {
+  const {id, background} = section;
+  const toast = useActionToast();
   const [{ paddingTop, paddingBottom }, setPadding] = useState<Padding>({
     paddingTop: section.paddingTop,
     paddingBottom: section.paddingBottom,
@@ -37,11 +42,30 @@ const SectionContainer = ({ children, section, className }: Props) => {
     1000
   );
 
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(
+    section.background?.url || null
+  );
   const [attribute, setAttribute] = useState<Attribute>({opacity: 1, blur: 0})
   
   const changeAttribute = (attributes: Attribute) => {
     setAttribute(attributes)
+  }
+
+  const addbackgroundImage = async(
+    url: SectionBackground["url"], 
+    alt?: SectionBackground["alt"]
+  ) => {
+    setBackgroundImage(url);
+
+    const state = await createBackground({data: {url, alt, section: {connect: {id}}}});
+    toast(state);
+  }
+
+  const deleteBackgroundImage = async (id: SectionBackground["id"]) => {
+    setBackgroundImage(null);
+    
+    const state = await deleteBackground(id);
+    toast(state);
   }
 
   useEffect(() => {
@@ -68,9 +92,9 @@ const SectionContainer = ({ children, section, className }: Props) => {
       <SectionContainerMenu 
         section={section} 
         attribute={attribute}
-        backgroundImage={backgroundImage}
-        onBackgroundChange={setBackgroundImage}
         onAttributeChange={changeAttribute}
+        onAddBackground={addbackgroundImage}
+        onDeleteBackground={deleteBackgroundImage}
       />
 
       <SectionContainerPaddings

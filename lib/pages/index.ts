@@ -21,6 +21,7 @@ export const getPageWithAll = async (
           index: "asc",
         },
         include: {
+          background: true,
           items: {
             orderBy: {
               index: "asc",

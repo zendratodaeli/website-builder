@@ -9,12 +9,16 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from 'react';
 import { ImageForm } from '../image-section/image-form';
+import { SectionBackground } from '@/lib/generated/prisma';
 
 type Props = {
-  onBackgroundAdd: (url: string) => void;
+  onAddBackground: (
+    url: SectionBackground["url"], 
+    alt?: SectionBackground["alt"]
+  ) => void;
 }
 
-const BackgroundAddDialog = ({onBackgroundAdd}: Props) => {
+const BackgroundAddDialog = ({onAddBackground}: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -29,7 +33,7 @@ const BackgroundAddDialog = ({onBackgroundAdd}: Props) => {
             <DialogTitle>Add Background Image</DialogTitle>
           </DialogHeader>
 
-          <ImageForm onSubmit={(url) => onBackgroundAdd(url)} />
+          <ImageForm onSubmit={onAddBackground} />
         </DialogContent>
       </Dialog>
   )
