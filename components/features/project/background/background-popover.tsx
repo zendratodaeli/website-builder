@@ -3,7 +3,6 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { BarChartHorizontal } from "lucide-react";
-import { useState } from "react";
 import { Attribute } from "../section-container/section-container";
 
 type Props = {attribute: Attribute;

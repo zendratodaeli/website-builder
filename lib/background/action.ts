@@ -69,3 +69,45 @@ export const deleteBackground = async (
     };
   }
 };
+
+type updateBackgroundPayload = {
+  id: SectionBackground["id"],
+  data: Prisma.SectionBackgroundUpdateInput
+};
+
+export const updateBackground = async (
+  { id, data }: updateBackgroundPayload
+): Promise<ActionsState<SectionBackground>> => {
+  try {
+    const background = await prisma.sectionBackground.findUnique({
+      where: { id },
+    });
+
+    if (!background) {
+      return {
+        code: StatusCode.NotFound,
+        error: new Error("Background not found"),
+      };
+    }
+
+    const updated = await prisma.sectionBackground.update({
+      where: { id },
+      data,
+      include: { section: true },
+    });
+
+    revalidatePath(`/projects/${updated.section.projectId}`);
+
+    return {
+      code: StatusCode.Ok,
+      data: updated,
+      message: "Background updated successfully",
+    };
+  } catch (error) {
+    console.error("Error updating background:", error);
+    return {
+      code: StatusCode.InternalServerError,
+      error: new Error("Something went wrong while updating the background"),
+    };
+  }
+};

@@ -10,7 +10,6 @@ import UpdateExternalLinkPopover from "../external-link/update-external-link-pop
 import TextSectionPosition from "./text-section-position";
 import { useCallback, useEffect } from "react";
 import { updateText } from "@/lib/text/action";
-import { toast } from "sonner";
 import useSectionWrapper from "@/hooks/use-section-wrapper";
 import SectionWrapper from "../section-wrapper/section-wrapper";
 import useTextEditor from "@/hooks/use-text-editor";

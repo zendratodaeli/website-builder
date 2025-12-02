@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, use, useCallback, useEffect, useState } from "react";
 import Container from "@/components/core/container";
 import { SectionWithAll } from "@/lib/project/types";
 import SectionContainerMenu from "./section-container-menu";
@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { SectionBackground } from "@/lib/generated/prisma";
 import useActionToast from "@/hooks/use-action-toast";
-import { createBackground, deleteBackground } from "@/lib/background/action";
+import { createBackground, deleteBackground, updateBackground } from "@/lib/background/action";
 
 type Props = {
   children: ReactNode;
@@ -45,11 +45,6 @@ const SectionContainer = ({ children, section, className }: Props) => {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(
     section.background?.url || null
   );
-  const [attribute, setAttribute] = useState<Attribute>({opacity: 1, blur: 0})
-  
-  const changeAttribute = (attributes: Attribute) => {
-    setAttribute(attributes)
-  }
 
   const addbackgroundImage = async(
     url: SectionBackground["url"], 
@@ -63,7 +58,7 @@ const SectionContainer = ({ children, section, className }: Props) => {
 
   const deleteBackgroundImage = async (id: SectionBackground["id"]) => {
     setBackgroundImage(null);
-    
+
     const state = await deleteBackground(id);
     toast(state);
   }
@@ -78,6 +73,34 @@ const SectionContainer = ({ children, section, className }: Props) => {
     });
   }, [top, bottom, section.id]);
 
+
+  const [attribute, setAttribute] = useState<Attribute>({
+    opacity: background?.opacity || 1, 
+    blur: background?.blur || 0
+  })
+  
+  const changeAttribute = (attributes: Attribute) => {
+    setAttribute(attributes)
+  }
+
+  const {opacity, blur} = useDebounce(attribute, 1000);
+
+  const updateBackgroundImage = useCallback(async (
+    id: SectionBackground["id"],
+    opacity: SectionBackground["opacity"],
+    blur: SectionBackground["blur"]
+  ) => {
+   const state = await updateBackground({id, data: { opacity, blur },});
+    toast(state);
+  }, [toast]);
+
+  useEffect(() => {
+    if (background && (background.opacity !== opacity || background.blur !== blur)) {
+      updateBackgroundImage(background.id, opacity, blur);
+    }
+  }, [opacity, blur, background, updateBackgroundImage]);
+
+  
   return (
     <section className="relative overflow-x-clip group">
       {backgroundImage && (
